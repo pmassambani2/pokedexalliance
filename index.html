@@ -246,6 +246,32 @@
     border-radius:2px 2px 0 0;
   }
 
+  /* ---------- RMT tab (eye-catching) ---------- */
+  .tab-btn-rmt{
+    background:linear-gradient(135deg, #25d366, #128c7e);
+    color:#fff !important;
+    border-radius:999px;
+    padding:9px 16px !important;
+    margin-right:14px !important;
+    box-shadow:0 3px 12px rgba(37,211,102,0.35);
+    position:relative;
+  }
+  .tab-btn-rmt svg{ opacity:1 !important; color:#fff; }
+  .tab-btn-rmt::after{ display:none !important; }
+  .tab-btn-rmt:hover{ color:#fff; transform:translateY(-1px); box-shadow:0 5px 16px rgba(37,211,102,0.45); }
+  .rmt-pulse{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:#fff;
+    display:inline-block;
+    margin-left:2px;
+    animation:rmtPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes rmtPulse{
+    0%, 100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(1.4); }
+  }
+
   /* ---------- Controls (sticky) ---------- */
   .controls{
     position:sticky;
@@ -772,6 +798,84 @@
     line-height:1.65;
   }
 
+  /* ---------- RMT view (eye-catching WhatsApp-themed) ---------- */
+  #view-rmt{ max-width:900px; margin:0 auto; animation:fadein .25s ease; }
+  .rmt-hero{
+    text-align:center;
+    padding:8px 20px 30px;
+  }
+  .rmt-icon{
+    width:56px; height:56px;
+    border-radius:16px;
+    margin:0 auto 18px;
+    background:linear-gradient(135deg, #25d366, #128c7e);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    box-shadow:0 10px 26px rgba(37,211,102,0.4);
+  }
+  .rmt-icon svg{ width:28px; height:28px; }
+  .rmt-hero h2{
+    font-family:'Sora', sans-serif;
+    font-size:23px;
+    margin:0 0 10px;
+    color:var(--text);
+  }
+  .rmt-hero p{
+    color:var(--text-muted);
+    font-size:14.5px;
+    max-width:540px;
+    margin:0 auto;
+    line-height:1.65;
+  }
+
+  .rmt-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:760px){ .rmt-grid{ grid-template-columns:1fr; } }
+
+  .rmt-qr-panel{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .rmt-qr-box{
+    width:220px; height:220px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    background:#fff;
+    padding:14px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:18px;
+  }
+  .rmt-qr-box img{ width:100%; height:100%; object-fit:contain; }
+  .rmt-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    background:linear-gradient(135deg, #25d366, #128c7e);
+    color:#fff;
+    font-weight:700;
+    font-size:14px;
+    text-decoration:none;
+    padding:13px 24px;
+    border-radius:999px;
+    box-shadow:0 6px 18px rgba(37,211,102,0.4);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .rmt-cta:hover{ transform:translateY(-2px); box-shadow:0 9px 22px rgba(37,211,102,0.5); }
+  .rmt-qr-caption{
+    font-size:12px;
+    color:var(--text-faint);
+    max-width:230px;
+    line-height:1.5;
+    margin-top:14px;
+  }
+  .rmt-rules-panel h2{
+    font-family:'Sora', sans-serif;
+    font-size:15px;
+    margin:0 0 16px;
+    color:var(--text);
+  }
+
   .donate-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -890,6 +994,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
         Localização de Hunts
       </button>
+      <button class="tab-btn tab-btn-rmt" data-view="rmt">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.04-.9.06-1.45-.09-.33-.09-.76-.24-1.31-.47-2.3-.99-3.8-3.3-3.92-3.45-.11-.15-.94-1.25-.94-2.38 0-1.13.59-1.68.8-1.91.21-.23.46-.29.61-.29.15 0 .31 0 .44.01.14.01.33-.05.52.4.19.46.66 1.59.72 1.71.06.12.1.26.02.41-.08.15-.12.25-.24.38-.12.13-.25.29-.36.39-.12.11-.24.24-.11.47.14.23.61 1.01 1.31 1.63.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.15-.16.62-.72.79-.97.16-.24.33-.2.55-.12.23.08 1.44.68 1.69.8.24.12.4.18.46.28.06.11.06.62-.16 1.24z"/></svg>
+        Mercado / RMT
+        <span class="rmt-pulse"></span>
+      </button>
       <button class="tab-btn" data-view="tasks">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.2a3.2 3.2 0 0 1 0 6M21 20c0-2.8-1.9-5.2-4.5-5.8"/></svg>
         Tarefas dos NPCs
@@ -945,6 +1054,39 @@
 
 <main>
   <section id="view-hunts" class="grid"></section>
+
+  <section id="view-rmt" hidden>
+    <div class="rmt-hero">
+      <div class="rmt-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.04-.9.06-1.45-.09-.33-.09-.76-.24-1.31-.47-2.3-.99-3.8-3.3-3.92-3.45-.11-.15-.94-1.25-.94-2.38 0-1.13.59-1.68.8-1.91.21-.23.46-.29.61-.29.15 0 .31 0 .44.01.14.01.33-.05.52.4.19.46.66 1.59.72 1.71.06.12.1.26.02.41-.08.15-.12.25-.24.38-.12.13-.25.29-.36.39-.12.11-.24.24-.11.47.14.23.61 1.01 1.31 1.63.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.15-.16.62-.72.79-.97.16-.24.33-.2.55-.12.23.08 1.44.68 1.69.8.24.12.4.18.46.28.06.11.06.62-.16 1.24z"/></svg>
+      </div>
+      <h2>Grupo de Mercado / RMT</h2>
+      <p>No PokeAlliance o RMT é liberado! Esse é o grupo oficial da comunidade no WhatsApp pra postar ofertas, anúncios e negociar Pokémon, itens e contas com outros jogadores.</p>
+    </div>
+
+    <div class="rmt-grid">
+      <div class="panel rmt-qr-panel">
+        <div class="rmt-qr-box">
+          <img src="data:image/png;base64,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" alt="QR Code do grupo de RMT no WhatsApp" />
+        </div>
+        <a class="rmt-cta" href="https://chat.whatsapp.com/FPKsCJvella6MmDeT3zeJv" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.2-1.77 1.24-.45.04-.9.06-1.45-.09-.33-.09-.76-.24-1.31-.47-2.3-.99-3.8-3.3-3.92-3.45-.11-.15-.94-1.25-.94-2.38 0-1.13.59-1.68.8-1.91.21-.23.46-.29.61-.29.15 0 .31 0 .44.01.14.01.33-.05.52.4.19.46.66 1.59.72 1.71.06.12.1.26.02.41-.08.15-.12.25-.24.38-.12.13-.25.29-.36.39-.12.11-.24.24-.11.47.14.23.61 1.01 1.31 1.63.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.15-.16.62-.72.79-.97.16-.24.33-.2.55-.12.23.08 1.44.68 1.69.8.24.12.4.18.46.28.06.11.06.62-.16 1.24z"/></svg>
+          Entrar no grupo
+        </a>
+        <p class="rmt-qr-caption">Aponte a câmera do celular pro QR Code, ou toque no botão acima pelo próprio celular.</p>
+      </div>
+
+      <div class="panel rmt-rules-panel">
+        <h2>Antes de postar</h2>
+        <ul class="obs-list">
+          <li>Negocie sempre com calma, prefira transações intermediadas ou com jogadores conhecidos da comunidade.</li>
+          <li>Descreva bem o que está oferecendo: raridade, tier, boost, elemento e prints quando possível.</li>
+          <li>Respeite as regras do próprio grupo assim que entrar — cada comunidade define seus limites de anúncio.</li>
+          <li>Golpes existem em qualquer RMT. Desconfie de preços bons demais e de pressa excessiva pra fechar negócio.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section id="view-tasks" hidden>
     <p class="view-intro">Tarefas de NPC de cada Pokémon: entregue o Pokémon certo pro NPC certo, no local certo. Toque em "Procurar Pokémon" para localizar rapidamente.</p>
@@ -1705,6 +1847,7 @@ taskSearchInput.addEventListener('input', renderTasks);
 // ---------- Tabs ----------
 const controlsBar = document.getElementById('controls');
 const viewHunts = document.getElementById('view-hunts');
+const viewRmt = document.getElementById('view-rmt');
 const viewTasks = document.getElementById('view-tasks');
 const viewMedias = document.getElementById('view-medias');
 const viewBoost = document.getElementById('view-boost');
@@ -1718,6 +1861,7 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.classList.add('active');
     const view = btn.dataset.view;
     viewHunts.hidden = view !== 'hunts';
+    viewRmt.hidden = view !== 'rmt';
     viewTasks.hidden = view !== 'tasks';
     viewMedias.hidden = view !== 'medias';
     viewBoost.hidden = view !== 'boost';
