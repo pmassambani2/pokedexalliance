@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex PokeAlliance — Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f4f7;
+    --panel:#ffffff;
+    --panel-2:#f8f9fb;
+    --border:#e4e6eb;
+    --border-strong:#d2d5dd;
+    --text:#1b1f27;
+    --text-muted:#666e7d;
+    --text-faint:#98a0ac;
+    --accent:#2f5fdb;
+    --accent-2:#7c3aed;
+    --accent-soft:#eaf0fe;
+    --wild:#5b52e0;
+    --normal:#1f9d55;
+    --hoenn:#d9720b;
+    --gold:#b8860b;
+    --shadow:0 1px 2px rgba(20,22,30,0.04), 0 8px 24px rgba(20,22,30,0.06);
+    --shadow-sm:0 1px 2px rgba(20,22,30,0.05);
+    --shadow-lg:0 12px 32px rgba(20,22,30,0.10);
+    --radius:14px;
+    --radius-sm:9px;
+    color-scheme:light;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d0f14;
+    --panel:#161920;
+    --panel-2:#1c2028;
+    --border:#262b35;
+    --border-strong:#333a47;
+    --text:#e9ebf1;
+    --text-muted:#99a1b0;
+    --text-faint:#5e6672;
+    --accent:#6690ff;
+    --accent-2:#a78bfa;
+    --accent-soft:#1c2740;
+    --wild:#9b93ff;
+    --normal:#41d685;
+    --hoenn:#ffa15c;
+    --gold:#e0b94f;
+    --shadow:0 1px 2px rgba(0,0,0,0.35), 0 8px 28px rgba(0,0,0,0.35);
+    --shadow-sm:0 1px 2px rgba(0,0,0,0.3);
+    --shadow-lg:0 16px 40px rgba(0,0,0,0.45);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 12% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 42%),
+      radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-2) 6%, transparent), transparent 38%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    transition:background .2s ease, color .2s ease;
+  }
+  ::selection{background:var(--accent); color:#fff;}
+  a{ color:inherit; }
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--panel);
+    border-bottom:1px solid var(--border);
+  }
+  .hero{
+    position:relative;
+    background-size:cover;
+    background-position:center 40%;
+    padding:0;
+  }
+  .hero-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(10,7,20,0.35) 0%, rgba(10,7,20,0.72) 65%, rgba(10,7,20,0.88) 100%);
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    max-width:1200px;
+    margin:0 auto;
+    padding:34px 24px 30px;
+  }
+  .hero-inner .brand-text h1,
+  .hero-inner .brand-text p,
+  .hero-inner .subtitle-full{ color:#fdfcff; }
+  .hero-inner .subtitle-full{ color:rgba(255,255,255,0.82); }
+  .hero-inner .brand-icon{ background:rgba(255,255,255,0.14); backdrop-filter:blur(6px); box-shadow:none; border:1px solid rgba(255,255,255,0.25); }
+  .hero-inner .theme-toggle{ background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.3); color:#fff; }
+  .hero-inner .theme-toggle:hover{ background:rgba(255,255,255,0.22); color:#fff; border-color:#fff; }
+  .header-inner{
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+    padding:20px 24px 22px;
+  }
+  .header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+  }
+  .brand-icon{
+    width:40px; height:40px;
+    border-radius:11px;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    flex-shrink:0;
+    box-shadow:0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .brand-icon svg{ width:21px; height:21px; }
+  .brand-text h1{
+    font-family:'Sora', sans-serif;
+    font-size:20px;
+    font-weight:800;
+    margin:0;
+    color:var(--text);
+    letter-spacing:-0.01em;
+  }
+  .brand-text p{
+    margin:1px 0 0;
+    font-size:12.5px;
+    color:var(--text-muted);
+  }
+
+  .theme-toggle{
+    width:40px; height:40px;
+    border-radius:11px;
+    background:var(--panel-2);
+    border:1px solid var(--border-strong);
+    color:var(--text-muted);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    transition:background .15s, color .15s, border-color .15s, transform .15s;
+  }
+  .theme-toggle:hover{ color:var(--text); border-color:var(--accent); transform:translateY(-1px); }
+  .theme-toggle svg{ width:18px; height:18px; }
+  .theme-toggle .icon-moon{ display:none; }
+  html[data-theme="dark"] .theme-toggle .icon-sun{ display:none; }
+  html[data-theme="dark"] .theme-toggle .icon-moon{ display:flex; }
+
+  .subtitle-full{
+    color:var(--text-muted);
+    font-size:14px;
+    max-width:620px;
+    margin:16px 0 0;
+    line-height:1.55;
+  }
+  .subtitle-full b{ color:var(--text); font-weight:600; }
+
+  .stats{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:20px;
+  }
+  .stat-pill{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:12px;
+    color:var(--text-muted);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .stat-pill b{ color:var(--text); font-weight:700; }
+  .stat-pill .pb-icon, .loc-tag .pb-icon, .legend-item .pb-icon{ flex-shrink:0; display:inline-flex; }
+  .dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .dot.wild{background:var(--wild);}
+  .dot.normal{background:var(--normal);}
+  .dot.hoenn{background:var(--hoenn);}
+
+  /* ---------- Legend (didactic) ---------- */
+  .legend-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 18px;
+    margin-top:14px;
+    padding:11px 15px;
+    background:var(--panel-2);
+    border:1px dashed var(--border-strong);
+    border-radius:11px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+  .legend-item b{ color:var(--text); font-weight:600; }
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin-top:26px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    background:none;
+    border:none;
+    padding:11px 4px;
+    margin-right:24px;
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-muted);
+    cursor:pointer;
+    position:relative;
+    transition:color .15s;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .tab-btn svg{ width:15px; height:15px; opacity:0.75; }
+  .tab-btn:hover{ color:var(--text); }
+  .tab-btn.active{ color:var(--accent); }
+  .tab-btn.active svg{ opacity:1; }
+  .tab-btn.active::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:2px;
+    background:var(--accent);
+    border-radius:2px 2px 0 0;
+  }
+
+  /* ---------- Controls (sticky) ---------- */
+  .controls{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:14px 20px;
+  }
+  .controls-inner{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .search-wrap{
+    position:relative;
+    flex:1 1 260px;
+    min-width:200px;
+  }
+  .search-wrap svg{
+    position:absolute;
+    left:14px; top:50%;
+    transform:translateY(-50%);
+    width:17px; height:17px;
+    color:var(--text-faint);
+    pointer-events:none;
+  }
+  #search{
+    width:100%;
+    background:var(--panel);
+    border:1.5px solid var(--border-strong);
+    border-radius:10px;
+    padding:11px 14px 11px 40px;
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14.5px;
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  #search::placeholder{ color:var(--text-faint); }
+  #search:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+
+  .tasks-search-wrap{
+    position:relative;
+    max-width:420px;
+    margin:0 0 22px;
+  }
+  .tasks-search-wrap svg{
+    position:absolute;
+    left:14px; top:50%;
+    transform:translateY(-50%);
+    width:17px; height:17px;
+    color:var(--text-faint);
+    pointer-events:none;
+  }
+  #taskSearch{
+    width:100%;
+    background:var(--panel);
+    border:1.5px solid var(--border-strong);
+    border-radius:10px;
+    padding:11px 14px 11px 40px;
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14.5px;
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  #taskSearch::placeholder{ color:var(--text-faint); }
+  #taskSearch:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+  .tasks-search-wrap .result-count{
+    position:absolute;
+    right:14px; top:50%;
+    transform:translateY(-50%);
+  }
+
+  .npc-row{
+    padding:10px 0;
+    border-top:1px solid var(--border);
+  }
+  .npc-row:first-of-type{ border-top:none; padding-top:0; }
+  .npc-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  .npc-tag svg{ width:13px; height:13px; color:var(--accent); flex-shrink:0; }
+  .no-tasks{
+    font-size:11.5px;
+    color:var(--text-faint);
+    font-style:italic;
+  }
+  .result-count{
+    font-size:11.5px;
+    color:var(--text-faint);
+    position:absolute;
+    right:14px; top:50%;
+    transform:translateY(-50%);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .filters{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    background:var(--panel);
+    border:1.5px solid var(--border-strong);
+    color:var(--text-muted);
+    border-radius:999px;
+    padding:8px 15px;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s;
+    white-space:nowrap;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .chip:hover{ border-color:var(--accent); color:var(--text); }
+  .chip.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  select.select-ctrl{
+    background:var(--panel);
+    border:1.5px solid var(--border-strong);
+    color:var(--text);
+    border-radius:10px;
+    padding:9.5px 30px 9.5px 13px;
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    outline:none;
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2398a0ac' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    transition:border-color .15s;
+  }
+  select.select-ctrl:hover{ border-color:var(--accent); }
+  select.select-ctrl:focus{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+
+  /* ---------- Grid (masonry via columns) ---------- */
+  main{ max-width:1200px; margin:0 auto; padding:26px 20px 90px; }
+  .grid{
+    column-count:1;
+    column-gap:14px;
+    animation:fadein .25s ease;
+  }
+  @keyframes fadein{ from{opacity:0;} to{opacity:1;} }
+  @media (min-width:760px){ .grid{ column-count:2; } }
+  @media (min-width:1140px){ .grid{ column-count:3; } }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+    break-inside:avoid;
+    display:inline-block;
+    width:100%;
+    box-shadow:var(--shadow-sm);
+    transition:box-shadow .2s, transform .2s, border-color .2s;
+  }
+  .card:hover{
+    box-shadow:var(--shadow-lg);
+    transform:translateY(-2px);
+    border-color:var(--border-strong);
+  }
+
+  .card-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .sprite-box{
+    width:50px; height:50px;
+    border-radius:10px;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .sprite-box img{
+    width:100%; height:100%;
+    image-rendering:pixelated;
+    object-fit:contain;
+  }
+  .sprite-box svg{ width:22px; height:22px; color:var(--text-faint); }
+  .card-name-wrap{ min-width:0; flex:1; }
+  .card-num{
+    font-size:11px;
+    font-weight:700;
+    color:var(--text-faint);
+    letter-spacing:0.5px;
+  }
+  .card-name{
+    font-weight:700;
+    font-size:15.5px;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .shiny-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px;
+    padding-bottom:12px;
+    margin-bottom:2px;
+    border-bottom:1px solid var(--border);
+  }
+  .tier-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:10.5px;
+    font-weight:800;
+    padding:3px 9px;
+    border-radius:999px;
+    border:1.4px solid currentColor;
+    letter-spacing:.3px;
+  }
+  .type-badge{
+    font-size:10.5px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:999px;
+    color:#fff;
+  }
+  .broke-badge{
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-muted);
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .broke-badge svg{ width:11px; height:11px; opacity:.7; }
+  .no-tier{
+    font-size:11.5px;
+    color:var(--text-faint);
+    font-style:italic;
+  }
+
+  .loc-block{
+    padding:10px 0;
+    border-top:1px solid var(--border);
+  }
+  .loc-block:first-of-type{ border-top:none; padding-top:0; }
+  .loc-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:6px;
+  }
+  .loc-tag.wild{ color:var(--wild); }
+  .loc-tag.normal{ color:var(--normal); }
+  .loc-tag.hoenn{ color:var(--hoenn); }
+  .loc-media-hint{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    text-transform:none;
+    font-weight:600;
+    color:var(--text-faint);
+    letter-spacing:0;
+    margin-left:2px;
+  }
+  .loc-media-hint svg{ width:10px; height:10px; }
+  .loc-text{ color:var(--text-muted); font-size:13px; line-height:1.4; }
+  .loc-text.empty{ color:var(--text-faint); font-style:italic; }
+
+  .media-slot{
+    margin-top:2px;
+    border-radius:9px;
+    overflow:hidden;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    min-height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .media-slot iframe{
+    width:100%;
+    border:0;
+    display:block;
+  }
+  .media-slot.imgur iframe{ height:280px; }
+  .media-slot.video iframe{ aspect-ratio:16/9; height:auto; }
+  .media-placeholder{
+    color:var(--text-faint);
+    font-size:12px;
+    padding:20px;
+  }
+
+  .empty-state{
+    text-align:center;
+    padding:70px 20px;
+    color:var(--text-faint);
+  }
+  .empty-state svg{ width:40px; height:40px; margin-bottom:14px; opacity:.5; }
+  .empty-state p{ font-size:14.5px; margin:0; }
+  .empty-state b{ color:var(--text-muted); }
+
+  /* ---------- Médias view ---------- */
+  #view-medias, #view-donate, #view-boost, #view-hazard, #view-rotations{ max-width:900px; margin:0 auto; animation:fadein .25s ease; }
+  .view-intro{
+    color:var(--text-muted);
+    font-size:14px;
+    margin:0 0 24px;
+    line-height:1.6;
+  }
+  .medias-layout{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:820px){ .medias-layout{ grid-template-columns:1fr; } }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow-sm);
+  }
+  .panel h2{
+    font-family:'Sora', sans-serif;
+    font-size:15px;
+    margin:0 0 16px;
+    color:var(--text);
+  }
+
+  .rarity-table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  .rarity-table tr{ border-bottom:1px solid var(--border); }
+  .rarity-table tr:last-child{ border-bottom:none; }
+  .rarity-table td{ padding:11px 4px; font-size:13.5px; }
+  .rarity-table td:last-child{
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    font-weight:700;
+    color:var(--text);
+  }
+  .rarity-badge{ display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--text); }
+  .rarity-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+
+  .obs-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .obs-list li{ font-size:13px; color:var(--text-muted); line-height:1.55; padding-left:18px; position:relative; }
+  .obs-list li::before{ content:''; position:absolute; left:0; top:7px; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+  .steps-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px; counter-reset:step-counter; }
+  .steps-list li{ display:flex; gap:12px; align-items:flex-start; font-size:13px; color:var(--text-muted); line-height:1.55; }
+  .steps-list li::before{
+    counter-increment:step-counter;
+    content:counter(step-counter);
+    flex-shrink:0;
+    width:22px; height:22px;
+    border-radius:50%;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:11.5px;
+    font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .panel-text{ font-size:13px; color:var(--text-muted); line-height:1.65; margin:0 0 10px; }
+  .panel-text:last-child{ margin-bottom:0; }
+  .panel-text b{ color:var(--text); }
+  .table-footnote{ font-size:12px; color:var(--text-faint); line-height:1.55; margin-top:10px; }
+  .checklist-label{ font-size:12.5px; color:var(--text-muted); font-weight:600; margin:16px 0 10px; }
+
+  /* ---------- Rotations ---------- */
+  .rotation-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    margin-bottom:12px;
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+  }
+  .rotation-card summary{
+    list-style:none;
+    cursor:pointer;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .rotation-card summary::-webkit-details-marker{ display:none; }
+  .rotation-summary-left{ display:flex; align-items:center; gap:12px; min-width:0; }
+  .rotation-type-dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .rotation-type-dot.dual{ background:none; position:relative; overflow:hidden; }
+  .rotation-name{ font-weight:800; font-size:15px; color:var(--text); }
+  .rotation-pros-preview{ font-size:12px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rotation-chevron{ width:16px; height:16px; color:var(--text-faint); flex-shrink:0; transition:transform .2s; }
+  .rotation-card[open] .rotation-chevron{ transform:rotate(180deg); }
+  .rotation-body{ padding:0 18px 18px; border-top:1px solid var(--border); }
+  .rotation-section-label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-faint); margin:16px 0 10px; }
+  .rotation-section-label:first-child{ margin-top:16px; }
+
+  .member-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+  .member-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:6px 11px 6px 6px;
+    font-size:12.5px;
+  }
+  .member-sprite{
+    width:26px; height:26px;
+    border-radius:7px;
+    flex-shrink:0;
+  }
+  .member-sprite svg{ width:13px; height:13px; }
+  .member-name{ color:var(--text); font-weight:600; }
+  .member-meta{ display:flex; align-items:center; gap:5px; }
+  .member-tier-badge{
+    font-size:9.5px;
+    font-weight:800;
+    padding:2px 7px;
+    border-radius:999px;
+    border:1.3px solid currentColor;
+    letter-spacing:.3px;
+  }
+  .member-offtank{
+    font-size:9.5px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:var(--accent);
+  }
+  .member-stars{ color:var(--gold); font-size:11px; letter-spacing:-1px; }
+  .member-note{ font-size:11px; color:var(--text-faint); font-style:italic; }
+
+  .rotation-improve-list, .rotation-notes-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .rotation-improve-list li, .rotation-notes-list li{ font-size:12.5px; color:var(--text-muted); padding-left:16px; position:relative; }
+  .rotation-improve-list li::before{ content:'↑'; position:absolute; left:0; color:var(--normal); font-weight:800; font-size:12px; }
+  .rotation-notes-list li::before{ content:'•'; position:absolute; left:2px; color:var(--text-faint); }
+
+  .pros-cons-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  @media (max-width:600px){ .pros-cons-grid{ grid-template-columns:1fr; } }
+  .pros-cons-box{ border-radius:10px; padding:12px 14px; font-size:12.5px; line-height:1.5; }
+  .pros-cons-box.pros{ background:color-mix(in srgb, var(--normal) 10%, var(--panel-2)); color:var(--text-muted); }
+  .pros-cons-box.cons{ background:color-mix(in srgb, var(--hoenn) 10%, var(--panel-2)); color:var(--text-muted); }
+  .pros-cons-box b{ display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; color:var(--text); }
+
+  .incomplete-item{ display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--border); font-size:13px; }
+  .incomplete-item:first-child{ border-top:none; padding-top:0; }
+  .incomplete-name{ font-weight:700; color:var(--text); min-width:70px; flex-shrink:0; }
+  .incomplete-notes{ color:var(--text-muted); }
+
+  .rates-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+  .rate-item{ background:var(--panel-2); border:1px solid var(--border); border-radius:9px; padding:12px 14px; text-align:center; }
+  .rate-item .rate-label{ font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.4px; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .rate-item .rate-value{ font-size:19px; font-weight:800; color:var(--accent); margin-top:2px; }
+
+  .panel + .panel{ margin-top:20px; }
+
+  /* ---------- Donation view ---------- */
+  .donate-hero{
+    text-align:center;
+    padding:8px 20px 32px;
+  }
+  .donate-hero .heart-icon{
+    width:52px; height:52px;
+    border-radius:14px;
+    margin:0 auto 18px;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    box-shadow:0 8px 22px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .donate-hero .heart-icon svg{ width:26px; height:26px; }
+  .donate-hero h2{
+    font-family:'Sora', sans-serif;
+    font-size:22px;
+    margin:0 0 10px;
+    color:var(--text);
+  }
+  .donate-hero p{
+    color:var(--text-muted);
+    font-size:14.5px;
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.65;
+  }
+
+  .donate-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:8px;
+  }
+  @media (max-width:760px){ .donate-grid{ grid-template-columns:1fr; } }
+
+  .donate-reasons{ display:flex; flex-direction:column; gap:14px; }
+  .reason-item{
+    display:flex;
+    gap:13px;
+    align-items:flex-start;
+  }
+  .reason-icon{
+    width:34px; height:34px;
+    border-radius:9px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .reason-icon svg{ width:16px; height:16px; }
+  .reason-text h3{ font-size:13.5px; margin:0 0 3px; color:var(--text); font-weight:700; }
+  .reason-text p{ font-size:12.5px; margin:0; color:var(--text-muted); line-height:1.5; }
+
+  .qr-panel{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .qr-box{
+    width:200px; height:200px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    background:#fff;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:10px;
+    color:var(--text-faint);
+    margin-bottom:16px;
+    box-shadow:var(--shadow-sm);
+  }
+  .qr-box img{ width:100%; height:100%; object-fit:contain; border-radius:6px; }
+  .qr-box svg{ width:38px; height:38px; opacity:.6; }
+  .qr-box span{ font-size:11.5px; font-weight:600; max-width:140px; line-height:1.4; }
+  .qr-note{ font-size:12px; color:var(--text-faint); line-height:1.5; max-width:230px; }
+  .qr-note b{ color:var(--text-muted); }
+
+  .thanks-strip{
+    margin-top:22px;
+    padding:16px 20px;
+    border-radius:12px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+  }
+
+  [hidden]{ display:none !important; }
+
+  footer{
+    text-align:center;
+    padding:28px 20px 46px;
+    color:var(--text-faint);
+    font-size:12px;
+    border-top:1px solid var(--border);
+    background:var(--panel);
+  }
+  footer b{ color:var(--text-muted); }
+
+  @media (max-width:520px){
+    .hero-inner{ padding:26px 16px 22px; }
+    .header-inner{ padding:16px 16px 18px; }
+    .brand-text h1{ font-size:17px; }
+    .qr-box{ width:160px; height:160px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero" style="background-image:url('https://images.stockcake.com/public/b/7/b/b7bc0873-b728-43cf-9ce3-af0ae0967d30_large/mystic-forest-path-stockcake.jpg')">
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5"/><circle cx="8.2" cy="8.2" r="3.4"/><circle cx="8.2" cy="8.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.6" cy="5.4" r="1" fill="currentColor" stroke="none"/><circle cx="19.4" cy="5.4" r="1" fill="currentColor" stroke="none"/><line x1="4" y1="13.6" x2="20" y2="13.6"/><line x1="4" y1="17.4" x2="13.5" y2="17.4"/></svg>
+          </div>
+          <div class="brand-text">
+            <h1>Pokédex PokeAlliance</h1>
+            <p>Wiki de hunts, tiers, brokes e tarefas</p>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar modo claro/escuro">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.3A8.3 8.3 0 1 1 9.7 4a6.6 6.6 0 0 0 10.3 10.3z"/></svg>
+        </button>
+      </div>
+      <p class="subtitle-full">Catálogo completo de hunts, tiers, brokes e tarefas de NPC de cada Pokémon do PokeAlliance, feito pela e para a comunidade.</p>
+    </div>
+  </div>
+
+  <div class="header-inner">
+    <div class="stats" id="stats"></div>
+    <div class="legend-bar" id="legendBar"></div>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="hunts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+        Localização de Hunts
+      </button>
+      <button class="tab-btn" data-view="tasks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.2a3.2 3.2 0 0 1 0 6M21 20c0-2.8-1.9-5.2-4.5-5.8"/></svg>
+        Tarefas dos NPCs
+      </button>
+      <button class="tab-btn" data-view="medias">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V10M11 19V5M18 19v-7"/></svg>
+        Médias de Brokes
+      </button>
+      <button class="tab-btn" data-view="boost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        Sistema de Boost
+      </button>
+      <button class="tab-btn" data-view="hazard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 16H3z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg>
+        Hazard &amp; Mega Dens
+      </button>
+      <button class="tab-btn" data-view="rotations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.7V12a4 4 0 0 1 4-4h14"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.3V12a4 4 0 0 1-4 4H3"/></svg>
+        Rotações de Times
+      </button>
+      <button class="tab-btn" data-view="donate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20.6s-7.5-4.6-9.9-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.9 5.6c-2.4 4.4-9.9 9-9.9 9z"/></svg>
+        Apoie o Projeto
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="controls" id="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Procurar Pokémon pelo nome..." autocomplete="off">
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div class="filters" id="filters">
+      <button class="chip active" data-filter="all">Todos</button>
+      <button class="chip" data-filter="wildscape"><span class="dot wild"></span>Wildscape</button>
+      <button class="chip" data-filter="normal"><span class="dot normal"></span>Normal</button>
+      <button class="chip" data-filter="hoenn"><span class="dot hoenn"></span>Hoenn</button>
+      <button class="chip" data-filter="missing">Sem local</button>
+    </div>
+    <select class="select-ctrl" id="tierSelect">
+      <option value="all">Todos os tiers</option>
+    </select>
+    <select class="select-ctrl" id="sortSelect">
+      <option value="dex">Ordenar: Nº da Dex</option>
+      <option value="tier">Ordenar: Tier (shiny)</option>
+      <option value="name">Ordenar: Nome (A-Z)</option>
+    </select>
+  </div>
+</div>
+
+<main>
+  <section id="view-hunts" class="grid"></section>
+
+  <section id="view-tasks" hidden>
+    <p class="view-intro">Tarefas de NPC de cada Pokémon: entregue o Pokémon certo pro NPC certo, no local certo. Toque em "Procurar Pokémon" para localizar rapidamente.</p>
+    <div class="tasks-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="taskSearch" type="text" placeholder="Procurar Pokémon pelo nome..." autocomplete="off">
+      <span class="result-count" id="taskResultCount"></span>
+    </div>
+    <div class="grid" id="view-tasks-grid"></div>
+  </section>
+
+  <section id="view-medias" hidden>
+    <p class="view-intro">Máximo de brokes (não oficial, descoberto pela comunidade) necessário pra chegar na chance mais alta de captura de shiny em cada raridade.</p>
+    <div class="medias-layout">
+      <div class="panel">
+        <h2>Máximo de brokes por raridade</h2>
+        <table class="rarity-table" id="rarityTable"></table>
+      </div>
+      <div>
+        <div class="panel">
+          <h2>Observações</h2>
+          <ul class="obs-list" id="obsList"></ul>
+        </div>
+        <div class="panel">
+          <h2>Rates de bolas</h2>
+          <div class="rates-grid" id="ratesGrid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-boost" hidden>
+    <p class="view-intro" id="boostIntro"></p>
+    <div class="medias-layout">
+      <div class="panel">
+        <h2>Como aplicar</h2>
+        <ol class="steps-list" id="boostSteps"></ol>
+        <p class="table-footnote" id="boostApplyNote"></p>
+      </div>
+      <div class="panel">
+        <h2>Pedras, faixas e chances</h2>
+        <table class="rarity-table" id="boostTable"></table>
+        <p class="table-footnote" id="boostTableNote"></p>
+      </div>
+    </div>
+
+    <div class="medias-layout" style="margin-top:20px;">
+      <div class="panel">
+        <h2>O que acontece quando falha</h2>
+        <p class="panel-text" id="boostFailText"></p>
+        <p class="panel-text" id="boostFailExample"></p>
+      </div>
+      <div class="panel">
+        <h2>Craft das pedras</h2>
+        <p class="panel-text" id="boostCraftIntro"></p>
+        <ul class="obs-list" id="boostCraftList"></ul>
+        <p class="table-footnote" id="boostCraftNote"></p>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <h2>Fragmentos elementais</h2>
+      <p class="panel-text" id="boostFragmentsText"></p>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <h2>Ordem de investimento</h2>
+      <p class="panel-text" id="boostInvestIntro"></p>
+      <p class="checklist-label">Antes de tentar uma pedra cara, confira:</p>
+      <ul class="obs-list" id="boostChecklist"></ul>
+    </div>
+  </section>
+
+  <section id="view-hazard" hidden>
+    <p class="view-intro" id="hazardIntro"></p>
+    <div class="panel" style="margin-bottom:20px;">
+      <h2>Tarefas dos NPCs de Hazard</h2>
+      <p class="table-footnote">Cada NPC abaixo libera um nível de Hazard entregando a lista de shinys pedida. Toque na localização pra ver o print de onde encontrar o NPC.</p>
+      <div class="grid" id="hazardTasksGrid" style="margin-top:16px;"></div>
+    </div>
+    <div class="panel" id="hazardPendingNote">
+      <h2>Explicação completa do sistema</h2>
+      <p class="panel-text">Essa parte ainda está sendo atualizada com o conteúdo detalhado da página oficial (efeitos por nível, Sealed Mega Stones, como funciona uma Mega Den e como subir com segurança). Assim que o texto chegar certinho, essa seção é completada.</p>
+    </div>
+  </section>
+
+  <section id="view-rotations" hidden>
+    <p class="view-intro" id="rotationsIntro"></p>
+    <div class="panel" style="margin-bottom:20px;">
+      <h2>Dicas gerais</h2>
+      <ul class="obs-list" id="rotationTips"></ul>
+    </div>
+    <div id="rotationsList"></div>
+    <div class="panel" style="margin-top:20px;">
+      <h2>Rotações incompletas</h2>
+      <p class="table-footnote" style="margin-top:0; margin-bottom:14px;">Ainda sem time definido — poucas opções testadas ou pouco viáveis por enquanto.</p>
+      <div id="rotationsIncomplete"></div>
+    </div>
+  </section>
+
+  <section id="view-donate" hidden>
+    <div class="donate-hero">
+      <div class="heart-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20.6s-7.5-4.6-9.9-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.9 5.6c-2.4 4.4-9.9 9-9.9 9z"/></svg>
+      </div>
+      <h2>Ajude a manter esse projeto no ar</h2>
+      <p>Essa wiki é mantida de forma independente e gratuita pra toda a comunidade do PokeAlliance. Ela existe fora do jogo — hospedagem, domínio e as horas gastas organizando, testando e atualizando cada localização de hunt saem do bolso de quem mantém o projeto. Se ela te ajudou a economizar tempo caçando, considere retribuir com uma doação, de qualquer valor.</p>
+    </div>
+
+    <div class="donate-grid">
+      <div class="panel donate-reasons">
+        <h2 style="margin-bottom:14px;">Pra onde vai sua doação</h2>
+        <div class="reason-item">
+          <div class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5a3.5 3.5 0 0 1 3.5-2c2 0 3.5 1.2 3.5 2.8 0 3-4.5 2.6-4.5 5.2 0 1.6 1.5 2.5 3 2.5 1.3 0 2.6-.6 3.2-1.7"/></svg></div>
+          <div class="reason-text">
+            <h3>Hospedagem e domínio</h3>
+            <p>Manter o site no ar, rápido e acessível pra qualquer pessoa do clã, a qualquer hora.</p>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div class="reason-text">
+            <h3>Tempo de atualização</h3>
+            <p>Toda vez que uma hunt muda ou um Pokémon novo entra na dex, alguém precisa achar, testar e registrar o local certinho.</p>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V10M11 19V5M18 19v-7"/></svg></div>
+          <div class="reason-text">
+            <h3>Novas funcionalidades</h3>
+            <p>Mais filtros, mais dados (como tiers e brokes) e melhorias contínuas na experiência de busca.</p>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="reason-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></div>
+          <div class="reason-text">
+            <h3>100% opcional</h3>
+            <p>A wiki continua livre e aberta pra todo mundo, com ou sem doação. Isso aqui é só uma forma de retribuir quem quiser.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel qr-panel">
+        <h2>Doe via Pix</h2>
+        <div class="qr-box" id="qrBox">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtwAAAN8CAIAAADkoOpkAABhh0lEQVR4nO3dd1xUV+L38UtvCooUEVDsoGIXFRuW2I3GkpiYosmuMYUYXWOSNWUTkxhNcZNsTGxpxlg2tqhRo4IVsCAoKiJFRRCQjkgZyjx/3NfOM78ZHS4wDmfw8/7Dl5w5c++5Z87MfOe2Y6FWqyUAAICGZtnQDQAAAJAkQgkAABAEoQQAAAiBUAIAAIRAKAEAAEIglAAAACEQSgAAgBAIJQAAQAiEEgAAIARCCQAAEAKhBAAACIFQAgAAhEAoAQAAQiCUAAAAIRBKAACAEAglAABACIQSAAAgBEIJAAAQAqEEAAAIgVACAACEQCgBAABCIJQAAAAhEEoAAIAQCCUAAEAIhBIAACAEQgkAABACoQQAAAiBUAIAAIRAKAEAAEIglAAAACEQSgAAgBAIJQAAQAiEEgAAIARCCQAAEAKhBAAACMG6oRsAAJAkSbp27VpQUJB2SY8ePQ4dOtRQ7QFMj1ACc9K7d++bN28aqODk5OTs7NymTZsePXqMGzcuODjYwsLCZM3Dw4lhCRgLh2/QqNy9ezcjIyMqKmr16tVTpkwZPHhwREREQzcKDzuGJaAQoQSN2dWrV6dMmfLTTz81dEOA/49hCdwPoQSNnFqtXrx48fHjxxu6IcD/x7AE7slCrVY3dBsApWo8eH8/Xbp0OXr0qNHbA0gMS8B42FMC87ZgwYLs/7l27Vp4ePjzzz9vaak7sC9fvpyQkNAgLcRDiGEJ1A1X36DxaNKkSbdu3ZYvX+7l5fXxxx/rPHr69OnOnTvL/8/Ly4v7n5SUlMzMzKKiovLychsbm6ZNm3p5eXXr1m3YsGETJkyws7MzvNKKiorNmzfv2LHjypUrhYWFbm5uXbp0mTJlyvTp062srFasWPHZZ59p13/77bcXLlyo+XPHjh1z587VrjB9+vTvvvtOZy2LFi36+eeftUvWrFnz2GOPGWjV3r17jx07Fh0dnZ2dXVhYaGdn17x588DAwCFDhsyYMcPZ2dnwdimhVquPHDly5MiRM2fO3Lp1Kz8/v6qqys3Nzc3Nzd/ff+jQocOGDfP09Lzf08vKynbt2nXixInY2Njs7OyioiJ7e/tmzZp16tRpwIABjz32WJs2be75xPj4+KFDh2qXaC6dPXTo0IYNG2JjY3Nzc728vPr06TN37tzevXtrapaXl//+++9btmxJSkoqKiry8PAYNGjQ3/72tx49etS/Q+5J+bA0fElwZWXlpEmTzp49q11hyZIlr7/+us4ylyxZsmbNGu2SkSNHbtq0iUt+ID5CCRqhadOm6X/6Z2dna/4/ePBg7T81qqqqysrKsrOzL1y48Ntvv7m6un700UczZsy434oSExNfeOGF+Ph4TcmtW7du3bp16NChdevW6XwxKFT/b46NGzd++umnmZmZ2oUqlerOnTupqal79+795JNP5s+fHxoaWp917d69+6OPPkpJSdEpT09PT09PP3/+/JYtW3x9fc+dO6f/XLVavWbNmpUrV+bm5mqXV1RU3Llz5+bNm4cPH162bNmjjz766aeftmjRQkl77t69+9prr/3xxx+akuvXr1+/fn3btm1vvvnmokWLJElKSkqaM2fOlStXNHVu3ry5efPmrVu3vvPOO6Ghoco3vw5qHJaGWVtbr169OiQk5M6dO5rCzz77bMyYMQEBAZqSkydPrl27VvuJHh4e3377LYkEZoHDN8B95eXlvfzyy99+++09H01OTp48ebJ2ItEWGxs7ZcqU1NTU2q60Pl8elZWVL7744uuvv66TSHQUFRUtXbr06aefVqlUdVhLdXX1ggULnn/+ef1EooRKpXr66affeecdnUSiv5adO3eGhITExcXVuMyKiorZs2drJxJty5cvX7du3c2bNydMmKCdSLTX9eGHH+7Zs0fhJjSU1q1b6+x4U6lUr7zySkVFhfxncXFxaGio9pmCFhYW3377rcJgBzQ4QgkaoW3btukXenh41G1pH374oX7ykL/+Df/MvXXr1pYtW2q7uvqEkjfeeGP79u0KK//111/aB5KUe/vtt3/99dc6PFH26quv/vXXXworZ2ZmPvnkk7du3TJc7fLly0eOHDFQ4eOPP541a1ZeXp6BOu+99151dbXChtWBUYbltGnTnnjiCe2SuLi4lStXyv9/5513dE65feWVV0JCQmrXUKDhEErQeBQXF1+6dOmtt95atmyZ/qP9+vXTKRk4cOCyZcsOHjx45cqVjIyMtLS0M2fOfP31123bttWuVl1d/Z///EfnuZs2bTp//rxO4cSJE48dO5aenh4dHf3SSy/VbSv0T4dU6NChQzpZwd7efsGCBSdPnkxNTT1//vxXX32l8xW4ZcuW8PDw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cZs3b7527ZpKpbp58+bOnTslSSooKFBeR0nPK3T27NlPPvkkJycnNzf3iy++OHXqVOvWrTt06GD0FdVZYGDgpUuX5K/2N95446effvrzzz/v3LmzadOm3bt3a6o98sgjkiQtWLDg7NmzJSUlp0+fXrp0aW3XZdztrXFIf/XVV+7u7toHv2R2dnaPPvpoXl7ezJkzT5w4UVRUlJeXd+zYsUWLFmnqGGW4AkZHKMGDNW7cuC+//DIgICAgIODzzz+3sLD417/+JT/0zDPPWFpaLl26tEOHDu3bt581a9agQYPc3Ny0n25jYzN58uSSkpIZM2a0bt36kUceCQoKsra+x7lQzz77rIWFxQcffCDPfqL9+btjxw7NnSFUKlVERITmz5s3bxprS0ePHj18+PCsrKyZM2f6+fn16dNn+/bt9vb27777rvKF1NgnarX67NmzoaGh8u0levfu/fvvv9vZ2U2ZMkV5HSU9r9D48eO/+eabgIAAf3//Tz/9VH4JNAcF6r8iha/dihUr5ML169dLkvTEE0/IfyYmJo4cObKoqOjo0aOSJM2ZM2fx4sVvv/12YGDgr7/+OmPGDM0SZs2aFRAQkJCQMG7cuDZt2kyYMEE++6TG43HaatzeWg1FA0O6RkuXLm3btu25c+cee+yx9u3bd+7cedq0aSdPntRUMMpwBYyOUIIHq2fPnmvWrGnTpo2trW337t1/+eWXcePGyQ/169dv48aNvXr1cnR09PT0fPXVV7/44gv9JXzyySePPfaYk5OTq6vr3Llz7/f7tUuXLqtWrfLz86vVt4gRWVhY/PLLLwsWLPDz87OxsXFxcRkzZszevXt79uypfCE19omdnd2+ffvkLxJbW1tvb+/HHnts//79/v7+yuso7Hklunbtum7durZt29ra2gYGBv7www8TJ05Uvjkm0KlTp1GjRq1YsULeWfLKK6+cP3/++vXre/fu/eabbxISEuRqtra2O3bseOKJJ5o1a9a0adOZM2e+9dZbkiTVareBcbe3PkPazc3t4MGDr7/+eseOHe3s7Nzd3SdOnLhu3TpNBaMMV8DoLIx4Qhmg7dSpUxMnTnz77bcXLlzY0G3BQy09PX348OHTpk1btmyZ8medOHHisccee/3115csWfLg2gZAG3tKADRy3t7eu3btOnDgwKOPPnro0CHt82+0vf322z/88MP1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" alt="QR Code Pix para doação" />
+        </div>
+        <p class="qr-note">Aponte a câmera do app do seu banco pro QR Code acima para fazer uma doação via Pix. <b>Qualquer valor ajuda a manter esse projeto no ar.</b></p>
+      </div>
+    </div>
+
+    <div class="thanks-strip">Obrigado por fazer parte dessa comunidade — cada apoio ajuda a manter tudo isso vivo. 💜</div>
+  </section>
+</main>
+
+<footer>
+  Feito com 💜 por <b>parlin2</b> para a comunidade PokeAlliance · Agradecimento especial a <b>Mts Vitor</b>, que começou esse trabalho de catalogar tudo isso
+</footer>
+
+<script id="pokedex-data" type="application/json">[{"num":1,"name":"Bulbasaur","wildscape":"-","normal":"https://imgur.com/a/jcpzOgr","hoenn":"-","tier":"T5","moveset":"Grass","maxBroke":"~400","tasks":[{"npc":"Blake","loc":"https://imgur.com/a/bZOLHYr"}]},{"num":2,"name":"Ivysaur","wildscape":"-","normal":"https://imgur.com/a/XEfXuD8","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[{"npc":"Blake","loc":"https://imgur.com/a/bZOLHYr"}]},{"num":3,"name":"Venusaur","wildscape":"https://imgur.com/a/QZY9tMI","normal":"https://imgur.com/a/zRcrSLP","hoenn":"-","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[{"npc":"Penelope","loc":"https://imgur.com/a/uUDQMYp"},{"npc":"Bert","loc":"https://imgur.com/a/zWioDB8"},{"npc":"Mason","loc":"https://imgur.com/a/2a1rF5l"}]},{"num":4,"name":"Charmander","wildscape":"-","normal":"https://imgur.com/a/8vGvdYp","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[{"npc":"Stella","loc":"https://imgur.com/a/hWfJGuR"}]},{"num":5,"name":"Charmelion","wildscape":"-","normal":"https://imgur.com/a/5ZdzM08","hoenn":"-","tier":"T4","moveset":"Fire","maxBroke":"~600","tasks":[{"npc":"Stella","loc":"https://imgur.com/a/hWfJGuR"}]},{"num":6,"name":"Charizard","wildscape":"https://imgur.com/a/thSWZiw","normal":"https://imgur.com/a/ksXMwHN","hoenn":"-","tier":"T1","moveset":"Fire","maxBroke":"1.280","tasks":[{"npc":"Oliver","loc":"https://imgur.com/a/crIpAZr"},{"npc":"Bert","loc":"https://imgur.com/a/zWioDB8"}]},{"num":7,"name":"Squirtle","wildscape":"-","normal":"https://imgur.com/a/8ZPHQzh","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":8,"name":"Wartortle","wildscape":"-","normal":"https://imgur.com/a/wXrfm6F","hoenn":"-","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[]},{"num":9,"name":"Blastoise","wildscape":"https://imgur.com/a/H98mIzg","normal":"https://imgur.com/a/o6O5mnt","hoenn":"-","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Eva","loc":"https://imgur.com/a/EUrKfTz"},{"npc":"Bert","loc":"https://imgur.com/a/zWioDB8"}]},{"num":10,"name":"Caterpie","wildscape":"-","normal":"https://imgur.com/a/FRZPc0L","hoenn":"-","tier":"T6","moveset":"Bug","maxBroke":"~200","tasks":[{"npc":"Elena","loc":"https://imgur.com/a/Q8Xv483"}]},{"num":11,"name":"Metapod","wildscape":"-","normal":"https://imgur.com/a/Md3zxUt","hoenn":"-","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[{"npc":"Maya","loc":"https://imgur.com/a/lFsNSc4"}]},{"num":12,"name":"Butterfree","wildscape":"-","normal":"https://imgur.com/a/IAhK3th","hoenn":"-","tier":"T4","moveset":"Flying","maxBroke":"~600","tasks":[]},{"num":13,"name":"Weedle","wildscape":"-","normal":"https://imgur.com/a/3UGhQN6","hoenn":"-","tier":"T6","moveset":"Bug","maxBroke":"~200","tasks":[{"npc":"Elena","loc":"https://imgur.com/a/Q8Xv483"}]},{"num":14,"name":"Kakuna","wildscape":"-","normal":"https://imgur.com/a/u3FmFya","hoenn":"-","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[{"npc":"Maya","loc":"https://imgur.com/a/lFsNSc4"}]},{"num":15,"name":"Beedrill","wildscape":"-","normal":"https://imgur.com/a/1F8OZPT","hoenn":"-","tier":"T4","moveset":"Bug","maxBroke":"~600","tasks":[]},{"num":16,"name":"Pidgey","wildscape":"-","normal":"https://imgur.com/a/ANHSsgY","hoenn":"-","tier":"T6","moveset":"Flying","maxBroke":"~200","tasks":[{"npc":"Lara","loc":"https://imgur.com/a/Hpe1Tgw"},{"npc":"Hayden","loc":"https://imgur.com/a/pcKcLKB"}]},{"num":17,"name":"Pidgeotto","wildscape":"-","normal":"https://imgur.com/a/yq5WqUg","hoenn":"-","tier":"T4","moveset":"Flying","maxBroke":"~600","tasks":[{"npc":"Hayden","loc":"https://imgur.com/a/pcKcLKB"}]},{"num":18,"name":"Pidgeot","wildscape":"https://imgur.com/a/mZdWvFw","normal":"https://imgur.com/a/SmDawr1","hoenn":"-","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Hayden","loc":"https://imgur.com/a/pcKcLKB"}]},{"num":19,"name":"Rattata","wildscape":"-","normal":"https://imgur.com/a/ZyszZOZ","hoenn":"-","tier":"T6","moveset":"Normal","maxBroke":"~200","tasks":[{"npc":"Liam","loc":"https://imgur.com/a/1hoNp8D"}]},{"num":20,"name":"Raticate","wildscape":"-","normal":"https://imgur.com/a/ZyszZOZ","hoenn":"-","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[{"npc":"Leah","loc":"https://imgur.com/a/OAk89kY"}]},{"num":21,"name":"Spearow","wildscape":"-","normal":"https://imgur.com/a/ANHSsgY","hoenn":"-","tier":"T6","moveset":"Flying","maxBroke":"~200","tasks":[{"npc":"Lara","loc":"https://imgur.com/a/Hpe1Tgw"}]},{"num":22,"name":"Fearow","wildscape":"-","normal":"https://imgur.com/a/NVXqWOp","hoenn":"-","tier":"T3","moveset":"Flying","maxBroke":"~700","tasks":[]},{"num":23,"name":"Ekans","wildscape":"-","normal":"https://imgur.com/a/X7pm0Qb","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":24,"name":"Arbok","wildscape":"-","normal":"https://imgur.com/a/urtC1Gz","hoenn":"-","tier":"T3","moveset":"Poison","maxBroke":"~700","tasks":[{"npc":"Zoe","loc":"https://imgur.com/a/L9Nfkce"}]},{"num":25,"name":"Pikachu","wildscape":"-","normal":"https://imgur.com/a/eMjPulX","hoenn":"-","tier":"T4","moveset":"Electric","maxBroke":"~600","tasks":[]},{"num":26,"name":"Raichu","wildscape":"https://imgur.com/a/clP3jSD","normal":"https://imgur.com/a/tVt9b2v","hoenn":"-","tier":"T1","moveset":"Electric","maxBroke":"1.280","tasks":[]},{"num":27,"name":"Sandshrew","wildscape":"-","normal":"https://imgur.com/a/hqHxs3c","hoenn":"-","tier":"T5","moveset":"Ground","maxBroke":"~400","tasks":[{"npc":"Owen","loc":"https://imgur.com/a/oN5SIKI"}]},{"num":28,"name":"Sandslash","wildscape":"https://imgur.com/a/d4z4t8M","normal":"https://imgur.com/a/jyNtIqk","hoenn":"-","tier":"T3","moveset":"Ground","maxBroke":"~700","tasks":[{"npc":"Owen","loc":"https://imgur.com/a/oN5SIKI"}]},{"num":29,"name":"Nidoran female","wildscape":"-","normal":"https://imgur.com/a/fZJqgPy","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":30,"name":"Nidorina","wildscape":"-","normal":"https://imgur.com/a/x0itz9y","hoenn":"-","tier":"T4","moveset":"Ground","maxBroke":"~600","tasks":[]},{"num":31,"name":"Nidoqueen","wildscape":"https://imgur.com/a/lnONjUq","normal":"https://imgur.com/a/UiIeSQX","hoenn":"-","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[{"npc":"Elijah","loc":"https://imgur.com/a/h9HfdlB"}]},{"num":32,"name":"Nidoran Male","wildscape":"-","normal":"https://imgur.com/a/fZJqgPy","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":33,"name":"Nidorino","wildscape":"-","normal":"https://imgur.com/a/x0itz9y","hoenn":"-","tier":"T4","moveset":"Poison","maxBroke":"~600","tasks":[]},{"num":34,"name":"Nidoking","wildscape":"https://imgur.com/a/HWxtEs3","normal":"https://imgur.com/a/6fIH7lZ","hoenn":"-","tier":"T1","moveset":"Poison","maxBroke":"1.280","tasks":[{"npc":"Caleb","loc":"https://imgur.com/a/x0CsPv0"}]},{"num":35,"name":"Clefairy","wildscape":"-","normal":"https://imgur.com/a/HipDvE8","hoenn":"-","tier":"T5","moveset":"Fairy","maxBroke":"~400","tasks":[]},{"num":36,"name":"Clefable","wildscape":"https://imgur.com/a/sXQlso1","normal":"Escada na DG de Floette em Pewter","hoenn":"-","tier":"T3","moveset":"Fairy","maxBroke":"~700","tasks":[{"npc":"Sebastian","loc":"https://imgur.com/a/ZGcetex"}]},{"num":37,"name":"Vulpix","wildscape":"-","normal":"https://imgur.com/a/G4NlFHG","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":38,"name":"Ninetales","wildscape":"https://imgur.com/a/2uMZqFZ","normal":"https://imgur.com/a/Rh21XkV","hoenn":"-","tier":"T1","moveset":"Fire","maxBroke":"1.280","tasks":[]},{"num":39,"name":"Jigglypuff","wildscape":"-","normal":"https://imgur.com/a/HipDvE8","hoenn":"-","tier":"T5","moveset":"Fairy","maxBroke":"~400","tasks":[]},{"num":40,"name":"Wigglytuff","wildscape":"https://imgur.com/a/FuZNCOC","normal":"Escada na DG de Folette em Pewter","hoenn":"-","tier":"T2","moveset":"Fairy","maxBroke":"~900","tasks":[{"npc":"Violet","loc":"https://imgur.com/a/Z6GyJou"}]},{"num":41,"name":"Zubat","wildscape":"-","normal":"https://imgur.com/a/RlR6LYU","hoenn":"-","tier":"T5","moveset":"Flying","maxBroke":"~400","tasks":[]},{"num":42,"name":"Golbat","wildscape":"-","normal":"https://imgur.com/a/uvfPxaO","hoenn":"-","tier":"T4","moveset":"Flying","maxBroke":"~600","tasks":[]},{"num":43,"name":"Oddish","wildscape":"-","normal":"https://imgur.com/a/2SuUURl","hoenn":"-","tier":"T6","moveset":"Poison","maxBroke":"~200","tasks":[]},{"num":44,"name":"Gloom","wildscape":"-","normal":"https://imgur.com/a/TaH2l6m","hoenn":"-","tier":"T4","moveset":"Poison","maxBroke":"~600","tasks":[]},{"num":45,"name":"Vileplume","wildscape":"-","normal":"https://imgur.com/a/iOsQeVF","hoenn":"-","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":46,"name":"Paras","wildscape":"-","normal":"https://imgur.com/a/tv3nErv","hoenn":"-","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[]},{"num":47,"name":"Parasect","wildscape":"-","normal":"https://imgur.com/a/tv3nErv","hoenn":"-","tier":"T4","moveset":"Bug","maxBroke":"~600","tasks":[]},{"num":48,"name":"Venonat","wildscape":"-","normal":"https://imgur.com/a/X5fPhhu","hoenn":"-","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[]},{"num":49,"name":"Venomoth","wildscape":"https://imgur.com/a/pfHx2qk","normal":"https://imgur.com/a/09DbkdU","hoenn":"-","tier":"T2","moveset":"Bug","maxBroke":"~900","tasks":[]},{"num":50,"name":"Diglett","wildscape":"-","normal":"https://imgur.com/a/oqtqJb4","hoenn":"-","tier":"T5","moveset":"Ground","maxBroke":"~400","tasks":[{"npc":"Owen","loc":"https://imgur.com/a/oN5SIKI"}]},{"num":51,"name":"Dugtrio","wildscape":"-","normal":"https://imgur.com/a/qAQiMyS","hoenn":"-","tier":"T3","moveset":"Ground","maxBroke":"~700","tasks":[{"npc":"Owen","loc":"https://imgur.com/a/oN5SIKI"}]},{"num":52,"name":"Meowth","wildscape":"-","normal":"https://imgur.com/a/ZaKbHhf","hoenn":"-","tier":"T5","moveset":"Dark","maxBroke":"~400","tasks":[]},{"num":53,"name":"Persian","wildscape":"https://imgur.com/a/B7jUmCO","normal":"https://imgur.com/a/pCa1RXB","hoenn":"-","tier":"T2","moveset":"Dark","maxBroke":"~900","tasks":[]},{"num":54,"name":"Psyduck","wildscape":"-","normal":"https://imgur.com/a/ndO8iRQ","hoenn":"-","tier":"T5","moveset":"Psychic","maxBroke":"~400","tasks":[]},{"num":55,"name":"Golduck","wildscape":"-","normal":"https://youtu.be/jTEe_aB8h-A","hoenn":"-","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[]},{"num":56,"name":"Mankey","wildscape":"-","normal":"https://imgur.com/a/4E7gOtq","hoenn":"-","tier":"T5","moveset":"Fighting","maxBroke":"~400","tasks":[]},{"num":57,"name":"Primeape","wildscape":"-","normal":"https://imgur.com/a/4E7gOtq","hoenn":"-","tier":"T3","moveset":"Fighting","maxBroke":"~700","tasks":[]},{"num":58,"name":"Growlithe","wildscape":"-","normal":"https://imgur.com/a/yAYRe4r","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":59,"name":"Arcanine","wildscape":"https://imgur.com/a/NnkwV5t","normal":"https://imgur.com/a/InCkrp9","hoenn":"-","tier":"Super Rare","moveset":"Fire","maxBroke":"3.500","tasks":[{"npc":"Chloe","loc":"https://imgur.com/a/21pTgjt"}]},{"num":60,"name":"Poliwag","wildscape":"-","normal":"https://imgur.com/a/LmUUKug","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":61,"name":"Poliwhirl","wildscape":"-","normal":"https://imgur.com/a/4pP85lz","hoenn":"-","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[]},{"num":62,"name":"Poliwrath","wildscape":"https://imgur.com/a/c9ewG6a","normal":"https://imgur.com/a/IyWzoPx","hoenn":"-","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[]},{"num":63,"name":"Abra","wildscape":"-","normal":"https://imgur.com/a/ekO6c8T","hoenn":"-","tier":"T5","moveset":"Psychic","maxBroke":"~400","tasks":[]},{"num":64,"name":"Kadabra","wildscape":"-","normal":"https://imgur.com/a/G7qjSsO","hoenn":"-","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[]},{"num":65,"name":"Alakazam","wildscape":"https://imgur.com/a/OEmy8zV","normal":"https://imgur.com/a/n2TjM6f","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Psychic","maxBroke":"22.535","tasks":[{"npc":"Isaac","loc":"?"}]},{"num":66,"name":"Machop","wildscape":"-","normal":"https://imgur.com/a/C6BDrQk","hoenn":"-","tier":"T5","moveset":"Fighting","maxBroke":"~400","tasks":[{"npc":"Gavin","loc":"https://imgur.com/a/1yRsaFj"}]},{"num":67,"name":"Machoke","wildscape":"-","normal":"https://imgur.com/a/C6BDrQk","hoenn":"-","tier":"T4","moveset":"Fighting","maxBroke":"~600","tasks":[{"npc":"Gavin","loc":"https://imgur.com/a/1yRsaFj"}]},{"num":68,"name":"Machamp","wildscape":"https://imgur.com/a/yB63tms","normal":"Norte de Lavender, último andar","hoenn":"-","tier":"Super Rare","moveset":"Fighting","maxBroke":"3.500","tasks":[]},{"num":69,"name":"Bellsprout","wildscape":"-","normal":"https://imgur.com/a/MnFL6no","hoenn":"-","tier":"T5","moveset":"Grass","maxBroke":"~400","tasks":[]},{"num":70,"name":"Weepinbell","wildscape":"-","normal":"https://imgur.com/a/Xw7aLDs","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[{"npc":"Nina","loc":"https://imgur.com/a/lafCMUj"}]},{"num":71,"name":"Victreebel","wildscape":"-","normal":"https://imgur.com/a/oL0tt9a","hoenn":"-","tier":"T2","moveset":"Grass","maxBroke":"~900","tasks":[]},{"num":72,"name":"Tentacool","wildscape":"-","normal":"https://imgur.com/a/UadRpGw","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":73,"name":"Tentacruel","wildscape":"https://imgur.com/a/1MIh0TT","normal":"https://imgur.com/a/1MIh0TT","hoenn":"-","tier":"T1","moveset":"Poison","maxBroke":"1.280","tasks":[]},{"num":74,"name":"Geodude","wildscape":"-","normal":"https://imgur.com/a/IhJ17iJ","hoenn":"-","tier":"T5","moveset":"Rock","maxBroke":"~400","tasks":[]},{"num":75,"name":"Graveler","wildscape":"-","normal":"https://imgur.com/a/SHzJxH4","hoenn":"-","tier":"T4","moveset":"Rock","maxBroke":"~600","tasks":[]},{"num":76,"name":"Golem","wildscape":"https://imgur.com/a/rg5qYI4","normal":"https://imgur.com/a/1JOCaQq","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[]},{"num":77,"name":"Ponyta","wildscape":"-","normal":"https://imgur.com/a/Wj6MnzA","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":78,"name":"Rapidash","wildscape":"https://imgur.com/a/lwqRvJB","normal":"https://imgur.com/a/wtXPt06","hoenn":"-","tier":"T1","moveset":"Fire","maxBroke":"1.280","tasks":[]},{"num":79,"name":"Slowpoke","wildscape":"-","normal":"Poço direita de Azalea","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":80,"name":"Slowbro","wildscape":"-","normal":"Poço direita de Azalea","hoenn":"-","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[]},{"num":81,"name":"Magnemite","wildscape":"-","normal":"https://imgur.com/a/ZNQjOvj","hoenn":"-","tier":"T5","moveset":"Steel","maxBroke":"~400","tasks":[{"npc":"Aaron","loc":"https://imgur.com/a/pFkpjev"}]},{"num":82,"name":"Magneton","wildscape":"https://imgur.com/a/fbJrvin","normal":"https://imgur.com/a/ZNQjOvj","hoenn":"-","tier":"T2","moveset":"Steel","maxBroke":"~900","tasks":[]},{"num":83,"name":"Farfetch'd","wildscape":"https://imgur.com/a/mZdWvFw","normal":"Direita de Fuchsia","hoenn":"-","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Camila","loc":"https://imgur.com/a/qQvozOt"}]},{"num":84,"name":"Doduo","wildscape":"-","normal":"Esquerda de Viridian","hoenn":"-","tier":"T5","moveset":"Flying","maxBroke":"~400","tasks":[]},{"num":85,"name":"Dodrio","wildscape":"https://imgur.com/a/mZdWvFw","normal":"https://imgur.com/a/8rw5VI3","hoenn":"-","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[]},{"num":86,"name":"Seel","wildscape":"-","normal":"https://imgur.com/a/0FU7pxA","hoenn":"-","tier":"T5","moveset":"Ice","maxBroke":"~400","tasks":[]},{"num":87,"name":"Dewgong","wildscape":"https://imgur.com/a/AWD6nTs","normal":"https://imgur.com/a/6S3V66E","hoenn":"-","tier":"T3","moveset":"Ice","maxBroke":"~700","tasks":[{"npc":"Lucas","loc":"https://imgur.com/a/YO8943i"}]},{"num":88,"name":"Grimer","wildscape":"-","normal":"https://imgur.com/a/vgGrrfT","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":89,"name":"Muk","wildscape":"https://imgur.com/a/vgGrrfT","normal":"https://imgur.com/a/vgGrrfT","hoenn":"-","tier":"T1","moveset":"Poison","maxBroke":"1.280","tasks":[{"npc":"Connor","loc":"https://imgur.com/a/rNnKjpv"}]},{"num":90,"name":"Shellder","wildscape":"-","normal":"https://imgur.com/a/mHLB6sh","hoenn":"-","tier":"T5","moveset":"Ice","maxBroke":"~400","tasks":[]},{"num":91,"name":"Cloyster","wildscape":"https://imgur.com/a/JxKX8lv","normal":"Ilha de gelo sudeste de Kanto","hoenn":"-","tier":"T3","moveset":"Ice","maxBroke":"~700","tasks":[{"npc":"Aurora","loc":"https://imgur.com/a/c8zaZAh"}]},{"num":92,"name":"Gastly","wildscape":"-","normal":"https://imgur.com/a/9zmYETV","hoenn":"-","tier":"T5","moveset":"Ghost","maxBroke":"~400","tasks":[{"npc":"Grace","loc":"https://imgur.com/a/7owKwog"}]},{"num":93,"name":"Haunter","wildscape":"-","normal":"https://imgur.com/a/WeJwwK9","hoenn":"-","tier":"T4","moveset":"Ghost","maxBroke":"~600","tasks":[{"npc":"Grace","loc":"https://imgur.com/a/7owKwog"}]},{"num":94,"name":"Gengar","wildscape":"https://imgur.com/a/8auiFkj","normal":"Não tem","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Ghost","maxBroke":"22.535","tasks":[{"npc":"Jackson","loc":"https://imgur.com/a/fDtaziH"}]},{"num":95,"name":"Onix","wildscape":"-","normal":"https://imgur.com/a/XRtE7Ns","hoenn":"-","tier":"T3","moveset":"Rock","maxBroke":"~700","tasks":[]},{"num":96,"name":"Drowzee","wildscape":"-","normal":"https://imgur.com/a/H8LgV6N","hoenn":"-","tier":"T5","moveset":"Psychic","maxBroke":"~400","tasks":[]},{"num":97,"name":"Hypno","wildscape":"-","normal":"https://imgur.com/a/c500gBU","hoenn":"-","tier":"T2","moveset":"Psychic","maxBroke":"~900","tasks":[]},{"num":98,"name":"Krabby","wildscape":"-","normal":"https://imgur.com/a/9CsLe4f","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":99,"name":"Kingler","wildscape":"-","normal":"https://imgur.com/a/RJTlGC2","hoenn":"-","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[]},{"num":100,"name":"Voltorb","wildscape":"-","normal":"https://imgur.com/a/ZNQjOvj","hoenn":"-","tier":"T5","moveset":"Electric","maxBroke":"~400","tasks":[{"npc":"Aaron","loc":"https://imgur.com/a/pFkpjev"}]},{"num":101,"name":"Electrode","wildscape":"-","normal":"https://imgur.com/a/ZNQjOvj","hoenn":"-","tier":"T3","moveset":"Electric","maxBroke":"~700","tasks":[]},{"num":102,"name":"Exeggcute","wildscape":"-","normal":"Esquerda de Viridian","hoenn":"-","tier":"T5","moveset":"Psychic","maxBroke":"~400","tasks":[]},{"num":103,"name":"Exeggutor","wildscape":"https://imgur.com/a/Jh715JE","normal":"https://imgur.com/a/oelxrIL","hoenn":"-","tier":"T2","moveset":"Psychic","maxBroke":"~900","tasks":[]},{"num":104,"name":"Cubone","wildscape":"-","normal":"https://imgur.com/a/Q6i4UqM","hoenn":"-","tier":"T5","moveset":"Ground","maxBroke":"~400","tasks":[{"npc":"Lily","loc":"https://imgur.com/a/GEmLpCs"}]},{"num":105,"name":"Marowak","wildscape":"https://imgur.com/a/AYaHOY2","normal":"https://imgur.com/a/VrqZwDG","hoenn":"-","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[{"npc":"Lily","loc":"https://imgur.com/a/GEmLpCs"}]},{"num":106,"name":"Hitmonlee","wildscape":"https://imgur.com/a/pjIUv00","normal":"Não tem","hoenn":"-","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[]},{"num":107,"name":"Hitmonchan","wildscape":"https://imgur.com/a/pjIUv00","normal":"Não tem","hoenn":"-","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[]},{"num":108,"name":"Lickitung","wildscape":"-","normal":"Safari","hoenn":"-","tier":"T3","moveset":"Normal","maxBroke":"~700","tasks":[]},{"num":109,"name":"Koffing","wildscape":"-","normal":"https://imgur.com/a/vgGrrfT","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":110,"name":"Weezing","wildscape":"-","normal":"https://imgur.com/a/vgGrrfT","hoenn":"-","tier":"T3","moveset":"Poison","maxBroke":"~700","tasks":[]},{"num":111,"name":"Rhyhorn","wildscape":"-","normal":"https://imgur.com/a/cPbYaoO","hoenn":"-","tier":"T5","moveset":"Ground","maxBroke":"~400","tasks":[]},{"num":112,"name":"Rhydon","wildscape":"https://imgur.com/a/P6cK6PD","normal":"https://imgur.com/a/sROG59a","hoenn":"-","tier":"T2","moveset":"Ground","maxBroke":"~900","tasks":[]},{"num":113,"name":"Chansey","wildscape":"-","normal":"https://imgur.com/a/njzmTdU","hoenn":"-","tier":"T3","moveset":"Normal","maxBroke":"~700","tasks":[]},{"num":114,"name":"Tangela","wildscape":"https://imgur.com/a/dtwFHj6","normal":"https://imgur.com/a/IZyOqys","hoenn":"-","tier":"T2","moveset":"Grass","maxBroke":"~900","tasks":[{"npc":"Nolan","loc":"https://imgur.com/a/nlNYZER"},{"npc":"Vincent","loc":"https://imgur.com/a/DqsE5Ex"}]},{"num":115,"name":"Kangaskhan","wildscape":"https://imgur.com/a/j21SPSA","normal":"Safari","hoenn":"-","tier":"Super Rare","moveset":"Fighting","maxBroke":"3.500","tasks":[{"npc":"Matilda","loc":"https://imgur.com/a/GxzDzlT"}]},{"num":116,"name":"Horsea","wildscape":"-","normal":"https://imgur.com/a/vl4bFGw","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":117,"name":"Seadra","wildscape":"-","normal":"https://imgur.com/a/SBsknJ7","hoenn":"-","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[]},{"num":118,"name":"Goldeen","wildscape":"-","normal":"https://imgur.com/a/0ZHbtgY","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":119,"name":"Seaking","wildscape":"-","normal":"https://imgur.com/a/kd1pFE9","hoenn":"-","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[]},{"num":120,"name":"Staryu","wildscape":"-","normal":"https://imgur.com/a/mNdE7Lo","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":121,"name":"Starmie","wildscape":"https://imgur.com/a/ZaL8AAc","normal":"https://imgur.com/a/YOVObyR","hoenn":"-","tier":"T2","moveset":"Water","maxBroke":"~900","tasks":[]},{"num":122,"name":"Mr. Mime","wildscape":"https://imgur.com/a/bIuz6Tm","normal":"https://imgur.com/a/yn32FNm","hoenn":"-","tier":"Super Rare","moveset":"Psychic","maxBroke":"3.500","tasks":[{"npc":"Marcel","loc":"https://imgur.com/a/zxBmy6C"}]},{"num":123,"name":"Scyther","wildscape":"https://imgur.com/a/df36NrE","normal":"https://imgur.com/a/j21SPSA","hoenn":"-","tier":"Super Rare","moveset":"Bug","maxBroke":"3.500","tasks":[{"npc":"Blade","loc":"https://imgur.com/a/MWTHslg"}]},{"num":124,"name":"Jynx","wildscape":"https://imgur.com/a/3LppiO7","normal":"https://imgur.com/a/4fLbygt","hoenn":"-","tier":"T1","moveset":"Ice","maxBroke":"1.280","tasks":[{"npc":"Harper","loc":"https://imgur.com/a/dy3sR9T"}]},{"num":125,"name":"Electabuzz","wildscape":"https://imgur.com/a/clP3jSD","normal":"https://imgur.com/a/lx2xnEu","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Electric","maxBroke":"22.535","tasks":[]},{"num":126,"name":"Magmar","wildscape":"https://imgur.com/a/TykewxH","normal":"Esquerda do CP de Cinnabar","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Fire","maxBroke":"22.535","tasks":[]},{"num":127,"name":"Pinsir","wildscape":"https://imgur.com/a/T3rOBjE","normal":"https://imgur.com/a/Q0Pn5Tv","hoenn":"-","tier":"Super Rare","moveset":"Bug","maxBroke":"3.500","tasks":[{"npc":"Dexter","loc":"https://imgur.com/a/VfGDmhy"}]},{"num":128,"name":"Tauros","wildscape":"https://imgur.com/a/j21SPSA","normal":"Safari","hoenn":"-","tier":"Super Rare","moveset":"Dark","maxBroke":"3.500","tasks":[{"npc":"Riley","loc":"https://imgur.com/a/IEK8k14"}]},{"num":129,"name":"Magikarp","wildscape":"-","normal":"https://imgur.com/a/kMnqXdd","hoenn":"-","tier":"T6","moveset":"Water","maxBroke":"~200","tasks":[]},{"num":130,"name":"Gyarados","wildscape":"https://imgur.com/a/mfds9di","normal":"https://imgur.com/a/dvZETth","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Water","maxBroke":"22.535","tasks":[]},{"num":131,"name":"Lapras","wildscape":"https://imgur.com/a/ca4NlMA","normal":"https://imgur.com/a/gB97GTZ","hoenn":"-","tier":"T1","moveset":"Ice","maxBroke":"1.280","tasks":[{"npc":"Coral","loc":"https://imgur.com/a/IuuAQLl"}]},{"num":132,"name":"Ditto","wildscape":"-","normal":"-","hoenn":"-","tier":"T7","moveset":"Normal","maxBroke":null,"tasks":[{"npc":"Dr. Oliveira","loc":"https://imgur.com/a/bVsObWr"}]},{"num":133,"name":"Eevee","wildscape":"-","normal":"https://imgur.com/a/dJnqJtS","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":134,"name":"Vaporeon","wildscape":"https://imgur.com/a/RI7U1mv","normal":"https://imgur.com/a/rzkzhzF","hoenn":"-","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[]},{"num":135,"name":"Jolteon","wildscape":"https://imgur.com/a/clP3jSD","normal":"https://imgur.com/a/tVt9b2v","hoenn":"-","tier":"T1","moveset":"Electric","maxBroke":"1.280","tasks":[]},{"num":136,"name":"Flareon","wildscape":"https://imgur.com/a/0QTUhoj","normal":"https://imgur.com/a/ifO0TRh","hoenn":"-","tier":"T1","moveset":"Fire","maxBroke":"1.280","tasks":[]},{"num":137,"name":"Porygon","wildscape":"-","normal":"-","hoenn":"-","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[]},{"num":138,"name":"Omanyte","wildscape":"-","normal":"https://imgur.com/a/lrEa6jJ","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":139,"name":"Omastar","wildscape":"-","normal":"https://imgur.com/a/lrEa6jJ","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[]},{"num":140,"name":"Kabuto","wildscape":"-","normal":"https://imgur.com/a/hGRDfmM","hoenn":"-","tier":"T5","moveset":"Rock","maxBroke":"~400","tasks":[]},{"num":141,"name":"Kabutops","wildscape":"-","normal":"https://imgur.com/a/hGRDfmM","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[]},{"num":142,"name":"Aerodactyl","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":143,"name":"Snorlax","wildscape":"https://imgur.com/a/j21SPSA","normal":"https://imgur.com/a/gFsPWgx","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Normal","maxBroke":"22.535","tasks":[{"npc":"Doris","loc":"https://imgur.com/a/8FonsNS"}]},{"num":144,"name":"Articuno","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":145,"name":"Zapdos","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":146,"name":"Moltres","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":147,"name":"Dratini","wildscape":"-","normal":"Ilha de gelo sudeste de Kanto","hoenn":"-","tier":"T4","moveset":"Dragon","maxBroke":"~600","tasks":[]},{"num":148,"name":"Dragonair","wildscape":"https://imgur.com/a/P4wh1Pv","normal":"Ilha de gelo sudeste de Kanto","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Dragon","maxBroke":"22.535","tasks":[{"npc":"Scarlet","loc":"https://imgur.com/a/D2LbysH"}]},{"num":149,"name":"Dragonite","wildscape":"https://imgur.com/a/eJHK8SE","normal":"https://imgur.com/a/U3QIuQB","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Mythic","moveset":"Dragon","maxBroke":"?","tasks":[]},{"num":150,"name":"Mewtwo","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":151,"name":"Mew","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":152,"name":"Chikorita","wildscape":"-","normal":"https://imgur.com/a/INejCDG","hoenn":"-","tier":"T5","moveset":"Grass","maxBroke":"~400","tasks":[]},{"num":153,"name":"Bayleef","wildscape":"-","normal":"https://imgur.com/a/FQ8roQ4","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[]},{"num":154,"name":"Meganium","wildscape":"https://imgur.com/uw0XICj","normal":"https://imgur.com/a/iHrZsw8","hoenn":"-","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[{"npc":"Penelope","loc":"https://imgur.com/a/uUDQMYp"}]},{"num":155,"name":"Cyndaquil","wildscape":"-","normal":"https://imgur.com/a/PjJgh5m","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":156,"name":"Quilava","wildscape":"-","normal":"https://imgur.com/a/PjJgh5m","hoenn":"-","tier":"T4","moveset":"Fire","maxBroke":"~600","tasks":[]},{"num":157,"name":"Typhlosion","wildscape":"https://imgur.com/a/nmnNuO5","normal":"https://imgur.com/a/yhVaW4Z","hoenn":"-","tier":"T1","moveset":"Fire","maxBroke":"1.280","tasks":[]},{"num":158,"name":"Totodile","wildscape":"-","normal":"https://imgur.com/a/Oaet1M6","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":159,"name":"Croconaw","wildscape":"-","normal":"https://imgur.com/a/Pc6sqFF","hoenn":"-","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[]},{"num":160,"name":"Feraligatr","wildscape":"https://imgur.com/a/H98mIzg","normal":"https://imgur.com/a/wpVvk3n","hoenn":"-","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[]},{"num":161,"name":"Sentret","wildscape":"-","normal":"https://imgur.com/a/ScBW2W0","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":162,"name":"Furret","wildscape":"-","normal":"https://imgur.com/a/9Tbj4NB","hoenn":"-","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[]},{"num":163,"name":"Hoothoot","wildscape":"-","normal":"https://imgur.com/a/xxiIVMq","hoenn":"-","tier":"T5","moveset":"Flying","maxBroke":"~400","tasks":[]},{"num":164,"name":"Noctowl","wildscape":"https://imgur.com/a/6DevZes","normal":"https://imgur.com/a/k0zFzjl","hoenn":"-","tier":"T2","moveset":"Flying","maxBroke":"~900","tasks":[]},{"num":165,"name":"Ledyba","wildscape":"-","normal":"https://imgur.com/a/h0IZeRQ","hoenn":"-","tier":"T5","moveset":"Flying","maxBroke":"~400","tasks":[]},{"num":166,"name":"Ledian","wildscape":"-","normal":"Esquerda de Ecruteak","hoenn":"-","tier":"T3","moveset":"Fighting","maxBroke":"~700","tasks":[]},{"num":167,"name":"Spinarak","wildscape":"-","normal":"https://imgur.com/a/3AhXzRO","hoenn":"-","tier":"T5","moveset":"Poison","maxBroke":"~400","tasks":[]},{"num":168,"name":"Ariados","wildscape":"-","normal":"https://imgur.com/a/3AhXzRO","hoenn":"-","tier":"T3","moveset":"Bug","maxBroke":"~700","tasks":[]},{"num":169,"name":"Crobat","wildscape":"https://imgur.com/a/DgtNeZR","normal":"https://imgur.com/a/kAVI10S","hoenn":"-","tier":"T2","moveset":"Flying","maxBroke":"~900","tasks":[]},{"num":170,"name":"Chinchou","wildscape":"-","normal":"https://imgur.com/a/h2WnRle","hoenn":"-","tier":"T5","moveset":"Electric","maxBroke":"~400","tasks":[]},{"num":171,"name":"Lanturn","wildscape":"-","normal":"https://imgur.com/a/h2WnRle","hoenn":"-","tier":"T2","moveset":"Electric","maxBroke":"~900","tasks":[]},{"num":172,"name":"Pichu","wildscape":"-","normal":"https://imgur.com/a/owJDq0n","hoenn":"-","tier":"T5","moveset":"Electric","maxBroke":"~400","tasks":[]},{"num":173,"name":"Cleffa","wildscape":"-","normal":"https://imgur.com/a/wFWndAk","hoenn":"-","tier":"T6","moveset":"Normal","maxBroke":"~200","tasks":[]},{"num":174,"name":"Igglybuff","wildscape":"-","normal":"Ilha direita de Fuchsia","hoenn":"-","tier":"T6","moveset":"Normal","maxBroke":"~200","tasks":[]},{"num":175,"name":"Togepi","wildscape":"-","normal":"https://imgur.com/a/4Gfcwjm","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":176,"name":"Togetic","wildscape":"-","normal":"https://imgur.com/a/4Gfcwjm","hoenn":"-","tier":"T2","moveset":"Fairy","maxBroke":"~900","tasks":[]},{"num":177,"name":"Natu","wildscape":"-","normal":"Ilha norte de Ecruteak","hoenn":"-","tier":"T5","moveset":"Psychic","maxBroke":"~400","tasks":[]},{"num":178,"name":"Xatu","wildscape":"https://imgur.com/a/46mYVO7","normal":"https://imgur.com/a/yVLhMR7","hoenn":"-","tier":"T2","moveset":"Ghost","maxBroke":"~900","tasks":[]},{"num":179,"name":"Mareep","wildscape":"-","normal":"Norte de Olivine","hoenn":"-","tier":"T5","moveset":"Electric","maxBroke":"~400","tasks":[]},{"num":180,"name":"Flaaffy","wildscape":"-","normal":"Norte de Olivine","hoenn":"-","tier":"T4","moveset":"Electric","maxBroke":"~600","tasks":[]},{"num":181,"name":"Ampharos","wildscape":"https://imgur.com/a/O7GKc00","normal":"Norte de Olivine","hoenn":"-","tier":"T1","moveset":"Electric","maxBroke":"1.280","tasks":[]},{"num":182,"name":"Bellossom","wildscape":"-","normal":"https://imgur.com/a/y1nJZLe","hoenn":"-","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":183,"name":"Marill","wildscape":"-","normal":"https://imgur.com/a/3YGU4BO","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":184,"name":"Azumarill","wildscape":"-","normal":"https://imgur.com/a/3YGU4BO","hoenn":"-","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[]},{"num":185,"name":"Sudowoodo","wildscape":"-","normal":"-","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[]},{"num":186,"name":"Politoed","wildscape":"https://imgur.com/a/zMl0ekj","normal":"https://imgur.com/a/zMl0ekj","hoenn":"-","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[]},{"num":187,"name":"Hoppip","wildscape":"-","normal":"https://imgur.com/a/xTyMEaj","hoenn":"-","tier":"T5","moveset":"Grass","maxBroke":"~400","tasks":[]},{"num":188,"name":"Skiploom","wildscape":"-","normal":"https://imgur.com/a/ourpstD","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[]},{"num":189,"name":"Jumpluff","wildscape":"-","normal":"https://imgur.com/a/zyv2Y81","hoenn":"-","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":190,"name":"Aipom","wildscape":"-","normal":"Direita de Mahogany","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":191,"name":"Sunkern","wildscape":"-","normal":"Nordeste de Olivine","hoenn":"-","tier":"T5","moveset":"Grass","maxBroke":"~400","tasks":[]},{"num":192,"name":"Sunflora","wildscape":"-","normal":"https://imgur.com/a/EpRy5tT","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[]},{"num":193,"name":"Yanma","wildscape":"-","normal":"https://imgur.com/a/0GZB0Pc","hoenn":"-","tier":"T3","moveset":"Bug","maxBroke":"~700","tasks":[]},{"num":194,"name":"Wooper","wildscape":"-","normal":"https://imgur.com/a/zU19ndv","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":195,"name":"Quagsire","wildscape":"https://imgur.com/a/mXj9hj8","normal":"https://imgur.com/a/RYNQ8l0","hoenn":"-","tier":"T2","moveset":"Ground","maxBroke":"~900","tasks":[]},{"num":196,"name":"Espeon","wildscape":"https://imgur.com/a/CkBSqXN","normal":"-","hoenn":"-","tier":"T1","moveset":"Psychic","maxBroke":"1.280","tasks":[]},{"num":197,"name":"Umbreon","wildscape":"https://imgur.com/a/CkBSqXN","normal":"-","hoenn":"-","tier":"T1","moveset":"Dark","maxBroke":"1.280","tasks":[]},{"num":198,"name":"Murkrow","wildscape":"-","normal":"https://imgur.com/a/jYvUp9l","hoenn":"-","tier":"T3","moveset":"Dark","maxBroke":"~700","tasks":[]},{"num":199,"name":"Slowking","wildscape":"https://imgur.com/a/XUZFbv9","normal":"https://imgur.com/a/XUZFbv9","hoenn":"-","tier":"T1","moveset":"Psychic","maxBroke":"1.280","tasks":[]},{"num":200,"name":"Misdreavus","wildscape":"https://imgur.com/a/xfYPzTw","normal":"https://youtu.be/zipnyzf5caE","hoenn":"-","tier":"Super Rare","moveset":"Ghost","maxBroke":"3.500","tasks":[{"npc":"Mia","loc":"https://imgur.com/a/PBPp44A"},{"npc":"Wendy","loc":"https://imgur.com/a/cDdMYdF"}]},{"num":201,"name":"Unown","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":202,"name":"Wobbuffet","wildscape":"https://imgur.com/a/ZlGOsvk","normal":"https://imgur.com/a/l7MbVV5","hoenn":"-","tier":"Super Rare","moveset":"Psychic","maxBroke":"3.500","tasks":[{"npc":"Wanda","loc":"https://imgur.com/a/QY7kylO"}]},{"num":203,"name":"Girafarig","wildscape":"https://imgur.com/a/6m4rkdL","normal":"https://imgur.com/a/ZlGOsvk","hoenn":"-","tier":"T2","moveset":"Dark","maxBroke":"~900","tasks":[]},{"num":204,"name":"Pineco","wildscape":"-","normal":"https://imgur.com/a/AgaCXsX","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":205,"name":"Forretress","wildscape":"-","normal":"https://imgur.com/a/X4CH3uc","hoenn":"-","tier":"T2","moveset":"Steel","maxBroke":"~900","tasks":[]},{"num":206,"name":"Dunsparce","wildscape":"-","normal":"Direita de Mahogany","hoenn":"-","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[]},{"num":207,"name":"Gligar","wildscape":"-","normal":"https://imgur.com/a/wljXV9h","hoenn":"-","tier":"T4","moveset":"Bug","maxBroke":"~600","tasks":[]},{"num":208,"name":"Steelix","wildscape":"https://imgur.com/a/GWp5vC7","normal":"https://imgur.com/a/HDUZnBJ","hoenn":"-","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[]},{"num":209,"name":"Snubbull","wildscape":"-","normal":"https://imgur.com/a/i2zVgop","hoenn":"-","tier":"T5","moveset":"Fairy","maxBroke":"~400","tasks":[]},{"num":210,"name":"Granbull","wildscape":"https://imgur.com/a/ubd3F1A","normal":"https://imgur.com/a/6k6J7No","hoenn":"-","tier":"T2","moveset":"Fairy","maxBroke":"~900","tasks":[]},{"num":211,"name":"Qwilfish","wildscape":"https://imgur.com/a/TqFuygf","normal":"https://imgur.com/a/fmnPze7","hoenn":"-","tier":"T2","moveset":"Poison","maxBroke":"~900","tasks":[{"npc":"Quill","loc":"https://imgur.com/a/fmnPze7"}]},{"num":212,"name":"Scizor","wildscape":"https://imgur.com/a/TXJL5sM","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Steel","maxBroke":"22.535","tasks":[]},{"num":213,"name":"Shuckle","wildscape":"-","normal":"https://imgur.com/a/jom11IM","hoenn":"-","tier":"T4","moveset":"Bug","maxBroke":"~600","tasks":[]},{"num":214,"name":"Heracross","wildscape":"https://imgur.com/a/Cpi5yCV","normal":"https://imgur.com/a/zRWr3Ry","hoenn":"-","tier":"T2","moveset":"Fighting","maxBroke":"~900","tasks":[{"npc":"Atlas","loc":"https://imgur.com/a/JrzuMGt"}]},{"num":215,"name":"Sneasel","wildscape":"-","normal":"Andando Norte do CP de Blackthorn","hoenn":"-","tier":"T3","moveset":"Dark","maxBroke":"~700","tasks":[]},{"num":216,"name":"Teddiursa","wildscape":"-","normal":"https://imgur.com/a/K1wNTv6","hoenn":"-","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[]},{"num":217,"name":"Ursaring","wildscape":"https://imgur.com/a/nBXkwSw","normal":"https://imgur.com/a/K1wNTv6","hoenn":"-","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[]},{"num":218,"name":"Slugma","wildscape":"-","normal":"https://imgur.com/a/PjJgh5m","hoenn":"-","tier":"T5","moveset":"Rock","maxBroke":"~400","tasks":[]},{"num":219,"name":"Magcargo","wildscape":"https://imgur.com/a/PjJgh5m","normal":"https://imgur.com/a/FSCg92Z","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[]},{"num":220,"name":"Swinub","wildscape":"-","normal":"Andando Norte do CP de Blackthorn","hoenn":"-","tier":"T5","moveset":"Ice","maxBroke":"~400","tasks":[]},{"num":221,"name":"Piloswine","wildscape":"https://imgur.com/a/f5KRTsE","normal":"https://imgur.com/a/VfulNAF","hoenn":"-","tier":"T2","moveset":"Ground","maxBroke":"~900","tasks":[{"npc":"Benjamin","loc":"https://imgur.com/a/5sRvkND"}]},{"num":222,"name":"Corsola","wildscape":"-","normal":"https://imgur.com/a/SBsknJ7","hoenn":"-","tier":"T4","moveset":"Rock","maxBroke":"~600","tasks":[]},{"num":223,"name":"Remoraid","wildscape":"-","normal":"https://imgur.com/a/SBsknJ7","hoenn":"-","tier":"T5","moveset":"Water","maxBroke":"~400","tasks":[]},{"num":224,"name":"Octillery","wildscape":"-","normal":"https://imgur.com/a/SBsknJ7","hoenn":"-","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[]},{"num":225,"name":"Delibird","wildscape":"-","normal":"https://imgur.com/a/EDtI5vP","hoenn":"-","tier":"T3","moveset":"Ice","maxBroke":"~700","tasks":[]},{"num":226,"name":"Mantine","wildscape":"https://imgur.com/a/H98mIzg","normal":"https://imgur.com/a/SBsknJ7","hoenn":"-","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Marissa","loc":"https://imgur.com/a/29hR1XF"}]},{"num":227,"name":"Skarmory","wildscape":"https://imgur.com/a/otQbKEE","normal":"https://imgur.com/a/EBb46PO","hoenn":"-","tier":"Super Rare","moveset":"Steel","maxBroke":"3.500","tasks":[{"npc":"Autumn","loc":"https://imgur.com/a/TkJ6dSS"},{"npc":"Blaze","loc":"https://imgur.com/a/HQZwt8g"}]},{"num":228,"name":"Houndour","wildscape":"-","normal":"https://imgur.com/a/PjJgh5m","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":229,"name":"Houndoom","wildscape":"https://imgur.com/a/kUQvKbL","normal":"https://imgur.com/a/MjvZQ35","hoenn":"-","tier":"Super Rare","moveset":"Dark","maxBroke":"3.500","tasks":[{"npc":"Grayson","loc":"https://imgur.com/a/4J1YTmD"}]},{"num":230,"name":"Kingdra","wildscape":"https://imgur.com/a/W6HZl3X","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Water","maxBroke":"3.500","tasks":[]},{"num":231,"name":"Phanpy","wildscape":"-","normal":"Esquerda de Cianwood","hoenn":"-","tier":"T5","moveset":"Normal","maxBroke":"~400","tasks":[]},{"num":232,"name":"Donphan","wildscape":"https://imgur.com/a/70P2Qxv","normal":"https://imgur.com/a/DKLY2JN","hoenn":"-","tier":"T2","moveset":"Ground","maxBroke":"~900","tasks":[]},{"num":233,"name":"Porygon2","wildscape":"-","normal":"-","hoenn":"-","tier":"T2","moveset":"Psychic","maxBroke":"~900","tasks":[]},{"num":234,"name":"Stantler","wildscape":"-","normal":"Norte de Olivine","hoenn":"-","tier":"T2","moveset":"Normal","maxBroke":"~900","tasks":[]},{"num":235,"name":"Smeargle","wildscape":"https://imgur.com/a/vlWgMyH","normal":"-","hoenn":"-","tier":"T1","moveset":"?","maxBroke":"1.280","tasks":[]},{"num":236,"name":"Tyrogue","wildscape":"-","normal":"Sul de Cherrygrove","hoenn":"-","tier":"T4","moveset":"Fighting","maxBroke":"~600","tasks":[]},{"num":237,"name":"Hitmontop","wildscape":"https://imgur.com/a/30cn4iq","normal":"Sul de Cherrygrove","hoenn":"-","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[]},{"num":238,"name":"Smoochum","wildscape":"-","normal":"Ilha de gelo sudeste de Kanto","hoenn":"-","tier":"T5","moveset":"Ice","maxBroke":"~400","tasks":[]},{"num":239,"name":"Elekid","wildscape":"-","normal":"Direita de Ecruteak","hoenn":"-","tier":"T5","moveset":"Electric","maxBroke":"~400","tasks":[]},{"num":240,"name":"Magby","wildscape":"-","normal":"https://imgur.com/a/kShgmOK","hoenn":"-","tier":"T5","moveset":"Fire","maxBroke":"~400","tasks":[]},{"num":241,"name":"Miltank","wildscape":"https://imgur.com/a/doQnA6i","normal":"https://imgur.com/a/xxiIVMq","hoenn":"-","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[{"npc":"Henry","loc":"https://imgur.com/a/D03hzNM"},{"npc":"Daisy","loc":"https://imgur.com/a/D03hzNM"}]},{"num":242,"name":"Blissey","wildscape":"-","normal":"-","hoenn":"-","tier":"T1","moveset":"Normal","maxBroke":"1.280","tasks":[]},{"num":243,"name":"Raikou","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":244,"name":"Entei","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":245,"name":"Suicune","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":246,"name":"Larvitar","wildscape":"-","normal":"https://imgur.com/a/SJntAUa","hoenn":"-","tier":"T5","moveset":"Rock","maxBroke":"~400","tasks":[]},{"num":247,"name":"Pupitar","wildscape":"https://imgur.com/a/SJntAUa","normal":"https://imgur.com/a/SJntAUa","hoenn":"-","tier":"Super Rare","moveset":"Ground","maxBroke":"3.500","tasks":[]},{"num":248,"name":"Tyranitar","wildscape":"https://imgur.com/a/oEyaCY3","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Mythic","moveset":"Rock","maxBroke":"?","tasks":[]},{"num":249,"name":"Lugia","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":250,"name":"Ho-oh","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":251,"name":"Celebi","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":252,"name":"Treecko","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/QwRNjsJ","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[]},{"num":253,"name":"Grovyle","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/plu4yw9","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":254,"name":"Sceptile","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/0NfZ1UB","tier":"Ultra Rare","moveset":"Grass","maxBroke":"9.400","tasks":[{"npc":"Kaela","loc":"https://imgur.com/a/7Tok0hP"}]},{"num":255,"name":"Torchic","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/H8eBhUD","tier":"T4","moveset":"Fire","maxBroke":"~600","tasks":[{"npc":"Beatriz","loc":"https://imgur.com/a/13SqnNQ"}]},{"num":256,"name":"Combusken","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WaCvBxT","tier":"T3","moveset":"Fighting","maxBroke":"~700","tasks":[{"npc":"Beatriz","loc":"https://imgur.com/a/13SqnNQ"}]},{"num":257,"name":"Blaziken","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/Z1blUfu","tier":"Ultra Rare","moveset":"Fighting","maxBroke":"9.400","tasks":[{"npc":"Kaela","loc":"https://imgur.com/a/7Tok0hP"},{"npc":"Beatriz","loc":"https://imgur.com/a/13SqnNQ"}]},{"num":258,"name":"Mudkip","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/sZjLUro","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Cedric","loc":"https://imgur.com/a/CilI2Qu"}]},{"num":259,"name":"Marshtomp","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/7Nmijrk","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[{"npc":"Cedric","loc":"https://imgur.com/a/CilI2Qu"}]},{"num":260,"name":"Swampert","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/ZZR9q3t","tier":"Ultra Rare","moveset":"Ground","maxBroke":"9.400","tasks":[{"npc":"Cedric","loc":"https://imgur.com/a/CilI2Qu"},{"npc":"Kaela","loc":"https://imgur.com/a/7Tok0hP"}]},{"num":261,"name":"Poochyena","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/AV1brbq","tier":"T4","moveset":"Dark","maxBroke":"~600","tasks":[{"npc":"Diana","loc":"https://imgur.com/a/quY35DH"}]},{"num":262,"name":"Mightyena","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/TtFAFi8","tier":"Ultra Rare","moveset":"Dark","maxBroke":"9.400","tasks":[{"npc":"Diana","loc":"https://imgur.com/a/quY35DH"}]},{"num":263,"name":"Zigzagoon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WBUCnKo","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[{"npc":"Eduardo","loc":"https://imgur.com/a/srQujl5"}]},{"num":264,"name":"Linoone","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/OZ3NIfX","tier":"T2","moveset":"Normal","maxBroke":"~900","tasks":[{"npc":"Eduardo","loc":"https://imgur.com/a/srQujl5"}]},{"num":265,"name":"Wurmple","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/EPQWSoP","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[]},{"num":266,"name":"Silcoon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/EPQWSoP","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[{"npc":"Fernanda","loc":"https://imgur.com/a/DzCTHuU"}]},{"num":267,"name":"Beautifly","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/vePSZZs","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Fernanda","loc":"https://imgur.com/a/DzCTHuU"}]},{"num":268,"name":"Cascoon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/EPQWSoP","tier":"T5","moveset":"Bug","maxBroke":"~400","tasks":[{"npc":"Gustavo","loc":"https://imgur.com/a/qWFHjSa"}]},{"num":269,"name":"Dustox","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/aa8JVeg","tier":"T1","moveset":"Poison","maxBroke":"1.280","tasks":[{"npc":"Gustavo","loc":"https://imgur.com/a/qWFHjSa"}]},{"num":270,"name":"Lotad","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/H3DeAbj","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Helena","loc":"https://imgur.com/a/bVXSMgI"}]},{"num":271,"name":"Lombre","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/UH76hUF","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[{"npc":"Helena","loc":"https://imgur.com/a/bVXSMgI"}]},{"num":272,"name":"Ludicolo","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/uSuyBkT","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Helena","loc":"https://imgur.com/a/bVXSMgI"}]},{"num":273,"name":"Seedot","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/ddPPOJp","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[{"npc":"Igor","loc":"https://imgur.com/a/5qzdvFp"}]},{"num":274,"name":"Nuzleaf","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/BlSbyDr","tier":"T3","moveset":"Dark","maxBroke":"~700","tasks":[{"npc":"Igor","loc":"https://imgur.com/a/5qzdvFp"}]},{"num":275,"name":"Shiftry","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/d9DZYAm","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[{"npc":"Igor","loc":"https://imgur.com/a/5qzdvFp"}]},{"num":276,"name":"Taillow","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/PywbkCI","tier":"T4","moveset":"Flying","maxBroke":"~600","tasks":[]},{"num":277,"name":"Swellow","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/zWjp1is","tier":"Super Rare","moveset":"Flying","maxBroke":"3.500","tasks":[]},{"num":278,"name":"Wingull","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/mQzmvVE","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Kevin","loc":"https://imgur.com/a/3uzfVdr"}]},{"num":279,"name":"Pelipper","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/9ny4RTg","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Kevin","loc":"https://imgur.com/a/3uzfVdr"}]},{"num":280,"name":"Ralts","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/HeG92xQ","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[{"npc":"Larissa","loc":"https://imgur.com/a/4qZv6j4"}]},{"num":281,"name":"Kirlia","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/Duh5van","tier":"T3","moveset":"Psychic","maxBroke":"~700","tasks":[{"npc":"Larissa","loc":"https://imgur.com/a/4qZv6j4"}]},{"num":282,"name":"Gardevoir","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/Duh5van","tier":"Ultra Rare","moveset":"Fairy","maxBroke":"9.400","tasks":[{"npc":"Larissa","loc":"https://imgur.com/a/4qZv6j4"}]},{"num":283,"name":"Surskit","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/hupWoKE","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Marcelo","loc":"https://imgur.com/a/7RyMS2g"}]},{"num":284,"name":"Masquerain","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/A6mD163","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Marcelo","loc":"https://imgur.com/a/7RyMS2g"}]},{"num":285,"name":"Shroomish","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/ASbhmgA","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[{"npc":"Nicole","loc":"https://imgur.com/a/s6WzxSe"}]},{"num":286,"name":"Breloom","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/xkbItkt","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[{"npc":"Nicole","loc":"https://imgur.com/a/s6WzxSe"}]},{"num":287,"name":"Slakoth","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/ISjWYSS","tier":"T4","moveset":"Fighting","maxBroke":"~600","tasks":[{"npc":"Octavio","loc":"https://imgur.com/a/Rv0FwSX"}]},{"num":288,"name":"Vigoroth","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/zBv5poV","tier":"T3","moveset":"Normal","maxBroke":"~700","tasks":[{"npc":"Octavio","loc":"https://imgur.com/a/Rv0FwSX"}]},{"num":289,"name":"Slaking","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/JFAXd2m","tier":"Mythic","moveset":"Normal","maxBroke":"?","tasks":[{"npc":"Octavio","loc":"https://imgur.com/a/Rv0FwSX"}]},{"num":290,"name":"Nincada","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/lbHpkKV","tier":"T4","moveset":"Ground","maxBroke":"~600","tasks":[{"npc":"Patricia","loc":"https://imgur.com/a/E8qjeH8"}]},{"num":291,"name":"Ninjask","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/J42Cek5","tier":"T1","moveset":"Flying","maxBroke":"1.280","tasks":[{"npc":"Patricia","loc":"https://imgur.com/a/E8qjeH8"}]},{"num":292,"name":"Shedinja","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/LUgy00h","tier":"T1","moveset":"Ghost","maxBroke":"1.280","tasks":[{"npc":"Patricia","loc":"https://imgur.com/a/E8qjeH8"}]},{"num":293,"name":"Whismur","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/UOLx5iS","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[{"npc":"Quirino","loc":"https://imgur.com/a/rGxGeVU"}]},{"num":294,"name":"Loudred","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/9hx1oWG","tier":"T3","moveset":"Normal","maxBroke":"~700","tasks":[{"npc":"Quirino","loc":"https://imgur.com/a/rGxGeVU"}]},{"num":295,"name":"Exploud","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WTFRBwz","tier":"Ultra Rare","moveset":"Ice","maxBroke":"9.400","tasks":[{"npc":"Quirino","loc":"https://imgur.com/a/rGxGeVU"}]},{"num":296,"name":"Makuhita","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/aTDa0zK","tier":"T3","moveset":"Fighting","maxBroke":"~700","tasks":[{"npc":"Rafaela","loc":"https://imgur.com/a/subt538"}]},{"num":297,"name":"Hariyama","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/ywTJuVx","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[{"npc":"Rafaela","loc":"https://imgur.com/a/subt538"}]},{"num":298,"name":"Azurill","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/GKSI8P8","tier":"T3","moveset":"Normal","maxBroke":"~700","tasks":[]},{"num":299,"name":"Nosepass","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/idVWM4R","tier":"T3","moveset":"Rock","maxBroke":"~700","tasks":[]},{"num":300,"name":"Skitty","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/HXpaVFd","tier":"T4","moveset":"Normal","maxBroke":"~600","tasks":[]},{"num":301,"name":"Delcatty","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/PC3fNSZ","tier":"T1","moveset":"Fairy","maxBroke":"1.280","tasks":[]},{"num":302,"name":"Sableye","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/cI3PbPr","tier":"T1","moveset":"Dark","maxBroke":"1.280","tasks":[{"npc":"Wagner","loc":"https://imgur.com/a/pPbHeWc"}]},{"num":303,"name":"Mawile","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/odInvRR","tier":"T1","moveset":"Steel","maxBroke":"1.280","tasks":[]},{"num":304,"name":"Aron","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/dsmbUWE","tier":"T4","moveset":"Steel","maxBroke":"~600","tasks":[{"npc":"Ygor","loc":null}]},{"num":305,"name":"Lairon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/6drUaI7","tier":"T3","moveset":"Steel","maxBroke":"~700","tasks":[{"npc":"Ygor","loc":null}]},{"num":306,"name":"Aggron","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/cJndpSb","tier":"Super Rare","moveset":"Steel","maxBroke":"3.500","tasks":[{"npc":"Ygor","loc":null}]},{"num":307,"name":"Meditite","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/0irrv1r","tier":"T4","moveset":"Fighting","maxBroke":"~600","tasks":[{"npc":"Zuleica","loc":"https://imgur.com/a/0irrv1r"}]},{"num":308,"name":"Medicham","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/0irrv1r","tier":"T1","moveset":"Fighting","maxBroke":"1.280","tasks":[{"npc":"Zuleica","loc":"https://imgur.com/a/0irrv1r"}]},{"num":309,"name":"Electrike","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WJui6MS","tier":"T4","moveset":"Electric","maxBroke":"~600","tasks":[{"npc":"Adriano","loc":"https://imgur.com/a/gZXKevQ"}]},{"num":310,"name":"Manectric","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/OoNfzDJ","tier":"Ultra Rare","moveset":"Electric","maxBroke":"9.400","tasks":[{"npc":"Adriano","loc":"https://imgur.com/a/gZXKevQ"}]},{"num":311,"name":"Plusle","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/6gftpgd","tier":"T3","moveset":"Electric","maxBroke":"~700","tasks":[{"npc":"Bianca","loc":"https://imgur.com/a/NP74ZdI"}]},{"num":312,"name":"Minun","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/6gftpgd","tier":"T3","moveset":"Electric","maxBroke":"~700","tasks":[{"npc":"Bianca","loc":"https://imgur.com/a/NP74ZdI"}]},{"num":313,"name":"Volbeat","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WCp8TTD","tier":"T2","moveset":"?","maxBroke":"~900","tasks":[]},{"num":314,"name":"Illumise","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/WCp8TTD","tier":"T2","moveset":"?","maxBroke":"~900","tasks":[]},{"num":315,"name":"Roselia","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/Dv4T5af","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[]},{"num":316,"name":"Gulpin","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/OZOu6rY","tier":"T3","moveset":"?","maxBroke":"~700","tasks":[{"npc":"Fabiana","loc":"https://imgur.com/a/W1n420E"}]},{"num":317,"name":"Swalot","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/CVYjLFv","tier":"Ultra Rare","moveset":"Poison","maxBroke":"9.400","tasks":[{"npc":"Fabiana","loc":"https://imgur.com/a/W1n420E"}]},{"num":318,"name":"Carvanha","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/waSih15","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[{"npc":"Gilberto","loc":"https://imgur.com/a/cG8jdq3"}]},{"num":319,"name":"Sharpedo","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/xEQLyNo","tier":"Super Rare","moveset":"Water","maxBroke":"3.500","tasks":[{"npc":"Gilberto","loc":"https://imgur.com/a/cG8jdq3"}]},{"num":320,"name":"Wailmer","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/2m6nCb5","tier":"T3","moveset":"Water","maxBroke":"~700","tasks":[{"npc":"Heloisa","loc":"https://imgur.com/a/f1vbCNC"}]},{"num":321,"name":"Wailord","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/2m6nCb5","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Heloisa","loc":"https://imgur.com/a/f1vbCNC"}]},{"num":322,"name":"Numel","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/oweq0Ji","tier":"T4","moveset":"Fire","maxBroke":"~600","tasks":[{"npc":"Iuri","loc":"https://imgur.com/a/LltpRYe"}]},{"num":323,"name":"Camerupt","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/a8pfzjH","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[{"npc":"Iuri","loc":"https://imgur.com/a/LltpRYe"}]},{"num":324,"name":"Torkoal","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/KBxrXSg","tier":"Ultra Rare","moveset":"Fire","maxBroke":"9.400","tasks":[{"npc":"Jaqueline","loc":"https://imgur.com/a/e9oSags"}]},{"num":325,"name":"Spoink","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/TGgvFue","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[{"npc":"Kaue","loc":"https://imgur.com/a/iViOJtA"}]},{"num":326,"name":"Grumpig","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/sL7iPRj","tier":"T1","moveset":"Psychic","maxBroke":"1.280","tasks":[{"npc":"Kaue","loc":"https://imgur.com/a/iViOJtA"}]},{"num":327,"name":"Spinda","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/seJsd66","tier":"T3","moveset":"Psychic","maxBroke":"~700","tasks":[]},{"num":328,"name":"Trapinch","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/jDK1dA0","tier":"T4","moveset":"Ground","maxBroke":"~600","tasks":[{"npc":"Mario","loc":"https://imgur.com/a/J2yH0M6"}]},{"num":329,"name":"Vibrava","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/OAkNAlc","tier":"T3","moveset":"Ground","maxBroke":"~700","tasks":[{"npc":"Mario","loc":"https://imgur.com/a/J2yH0M6"}]},{"num":330,"name":"Flygon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/frxHhRk","tier":"Legendary","moveset":"Ground","maxBroke":"22.535","tasks":[{"npc":"Mario","loc":"https://imgur.com/a/J2yH0M6"}]},{"num":331,"name":"Cacnea","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/hoA3sFt","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[{"npc":"Natalia","loc":"https://imgur.com/a/CHRjs14"}]},{"num":332,"name":"Cacturne","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/DRfmDZB","tier":"T1","moveset":"Dark","maxBroke":"1.280","tasks":[{"npc":"Natalia","loc":"https://imgur.com/a/CHRjs14"}]},{"num":333,"name":"Swablu","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/4BU3DIw","tier":"T4","moveset":"Flying","maxBroke":"~600","tasks":[{"npc":"Osvaldo","loc":"https://imgur.com/a/4BU3DIw"}]},{"num":334,"name":"Altaria","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/4BU3DIw","tier":"Super Rare","moveset":"Dragon","maxBroke":"3.500","tasks":[{"npc":"Osvaldo","loc":"https://imgur.com/a/4BU3DIw"}]},{"num":335,"name":"Zangoose","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/NfMKEg7","tier":"T1","moveset":"Normal","maxBroke":"1.280","tasks":[{"npc":"Priscila","loc":"https://imgur.com/a/UZYLkq1"}]},{"num":336,"name":"Seviper","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/l3lliRe","tier":"Super Rare","moveset":"Poison","maxBroke":"3.500","tasks":[{"npc":"Renato","loc":"https://imgur.com/a/8blMAEF"},{"npc":"Sergio","loc":"https://imgur.com/a/xp2NokO"}]},{"num":337,"name":"Lunatone","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/NUmiPTH","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[{"npc":"Lyra","loc":"https://imgur.com/a/ZNfrPlF"},{"npc":"Thiago","loc":"https://imgur.com/a/tHVsIsX"}]},{"num":338,"name":"Solrock","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/eWSLlta","tier":"T1","moveset":"Rock","maxBroke":"1.280","tasks":[{"npc":"Helio","loc":"https://imgur.com/a/W937hgf"},{"npc":"Thiago","loc":"https://imgur.com/a/tHVsIsX"}]},{"num":339,"name":"Barboach","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/pCVvQWa","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Vicente","loc":"https://imgur.com/a/3VwW2qZ"}]},{"num":340,"name":"Whiscash","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/AfWRHhd","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[{"npc":"Vicente","loc":"https://imgur.com/a/3VwW2qZ"}]},{"num":341,"name":"Corphish","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/5Ljg7sC","tier":"T4","moveset":"Dark","maxBroke":"~600","tasks":[{"npc":"Xisto","loc":"https://imgur.com/a/8N0wTGr"}]},{"num":342,"name":"Crawdaunt","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/5Ljg7sC","tier":"T1","moveset":"Dark","maxBroke":"1.280","tasks":[{"npc":"Xisto","loc":"https://imgur.com/a/8N0wTGr"}]},{"num":343,"name":"Baltoy","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/8EPyq93","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[{"npc":"Yasmin","loc":"https://imgur.com/a/91iZYub"}]},{"num":344,"name":"Claydol","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/FaZB45d","tier":"T1","moveset":"Ground","maxBroke":"1.280","tasks":[{"npc":"Yasmin","loc":"https://imgur.com/a/91iZYub"}]},{"num":345,"name":"Lileep","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":346,"name":"Cradily","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/zziX3N4","tier":"T1","moveset":"Grass","maxBroke":"1.280","tasks":[{"npc":"Zeca","loc":"https://imgur.com/a/dhBNsP3"}]},{"num":347,"name":"Anorith","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/xG6MiHI","tier":"T4","moveset":"Rock","maxBroke":"~600","tasks":[{"npc":"Alessandra","loc":"https://imgur.com/a/3TH2eLX"}]},{"num":348,"name":"Armaldo","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/xG6MiHI","tier":"Super Rare","moveset":"Rock","maxBroke":"3.500","tasks":[{"npc":"Alessandra","loc":"https://imgur.com/a/3TH2eLX"}]},{"num":349,"name":"Feebas","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/4Ovdko8","tier":"T4","moveset":"Water","maxBroke":"~600","tasks":[{"npc":"Elisa","loc":"https://imgur.com/a/KXcgrGa"}]},{"num":350,"name":"Milotic","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/4Ovdko8","tier":"Ultra Rare","moveset":"Water","maxBroke":"9.400","tasks":[{"npc":"Elisa","loc":"https://imgur.com/a/KXcgrGa"}]},{"num":351,"name":"Castform","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/Ts9I3R9","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":352,"name":"Kecleon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/8sxx7sN","tier":"T1","moveset":"Dark","maxBroke":"1.280","tasks":[{"npc":"Fernando","loc":"https://imgur.com/a/tIZh4hQ"}]},{"num":353,"name":"Shuppet","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/OahinY3","tier":"T4","moveset":"Ghost","maxBroke":"~600","tasks":[]},{"num":354,"name":"Banette","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/JL6EoDR","tier":"T1","moveset":"Ghost","maxBroke":"1.280","tasks":[]},{"num":355,"name":"Duskull","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/S4yJs5f","tier":"T4","moveset":"Ghost","maxBroke":"~600","tasks":[]},{"num":356,"name":"Dusclops","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/625I8kI","tier":"T1","moveset":"Ghost","maxBroke":"1.280","tasks":[]},{"num":357,"name":"Tropius","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/9vbSqES","tier":"Ultra Rare","moveset":"Flying","maxBroke":"9.400","tasks":[]},{"num":358,"name":"Chimecho","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/SGKMzoy","tier":"T1","moveset":"Psychic","maxBroke":"1.280","tasks":[{"npc":"Isadora","loc":"https://imgur.com/a/makffiD"}]},{"num":359,"name":"Absol","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/bKY4IH1","tier":"Legendary","moveset":"Dark","maxBroke":"22.535","tasks":[{"npc":"Jorge","loc":"https://imgur.com/a/JvDgg2S"},{"npc":"Rowena","loc":"https://imgur.com/a/3CUDkD2"}]},{"num":360,"name":"Wynaut","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/P3Yij7o","tier":"T4","moveset":"Psychic","maxBroke":"~600","tasks":[]},{"num":361,"name":"Snorunt","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/zoIbYgW","tier":"T4","moveset":"Ice","maxBroke":"~600","tasks":[]},{"num":362,"name":"Glalie","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/zeIeMhU","tier":"Ultra Rare","moveset":"Ice","maxBroke":"9.400","tasks":[]},{"num":363,"name":"Spheal","wildscape":"-","normal":"-","hoenn":null,"tier":"T4","moveset":"Ice","maxBroke":"~600","tasks":[{"npc":"Nelio","loc":"https://imgur.com/a/1SDaMvq"}]},{"num":364,"name":"Sealeo","wildscape":"-","normal":"-","hoenn":null,"tier":"T3","moveset":"Ice","maxBroke":"~700","tasks":[{"npc":"Nelio","loc":"https://imgur.com/a/1SDaMvq"}]},{"num":365,"name":"Walrein","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/MtwwL6b","tier":"Super Rare","moveset":"Ice","maxBroke":"3.500","tasks":[{"npc":"Nelio","loc":"https://imgur.com/a/1SDaMvq"}]},{"num":366,"name":"Clamperl","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/3by4nDT","tier":"T2","moveset":"Water","maxBroke":"~900","tasks":[{"npc":"Leonardo","loc":"https://imgur.com/a/7plXUBy"}]},{"num":367,"name":"Huntail","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/xi7IxsL","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Olivia","loc":"https://imgur.com/a/GvUNfvI"},{"npc":"Darian","loc":"https://imgur.com/a/yf8McW8"}]},{"num":368,"name":"Gorebyss","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/dtnPZxU","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Quezia","loc":"https://imgur.com/a/rPNCYPx"}]},{"num":369,"name":"Relicanth","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/RVcmBFH","tier":"T1","moveset":"Water","maxBroke":"1.280","tasks":[{"npc":"Roberto","loc":"https://imgur.com/a/6rbv74w"},{"npc":"Aldric","loc":"https://imgur.com/a/FWC14O8"}]},{"num":370,"name":"Luvdisc","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/HpHEs6t","tier":"T2","moveset":"Water","maxBroke":"~900","tasks":[{"npc":"Tiago","loc":"https://imgur.com/a/TD4brVl"}]},{"num":371,"name":"Bagon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/JWeTEEf","tier":"T4","moveset":"Dragon","maxBroke":"~600","tasks":[{"npc":"Sonia","loc":"https://imgur.com/a/aH6C5Aa"}]},{"num":372,"name":"Shelgon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/x6vRELh","tier":"T3","moveset":"Dragon","maxBroke":"~700","tasks":[{"npc":"Sonia","loc":"https://imgur.com/a/aH6C5Aa"}]},{"num":373,"name":"Salamence","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/c60bAOF","tier":"Ultra Rare","moveset":"Dragon","maxBroke":"9.400","tasks":[{"npc":"Sonia","loc":"https://imgur.com/a/aH6C5Aa"}]},{"num":374,"name":"Beldum","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/rQJH8mB","tier":"T4","moveset":"Steel","maxBroke":"~600","tasks":[{"npc":"Ester","loc":"https://imgur.com/a/63Z6NBG"}]},{"num":375,"name":"Metang","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/rQJH8mB","tier":"T1","moveset":"Steel","maxBroke":"1.280","tasks":[{"npc":"Ester","loc":"https://imgur.com/a/63Z6NBG"}]},{"num":376,"name":"Metagross","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/rQJH8mB","tier":"Ultra Rare","moveset":"Steel","maxBroke":"9.400","tasks":[{"npc":"Ester","loc":"https://imgur.com/a/63Z6NBG"}]},{"num":377,"name":"Regirock","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":378,"name":"Regice","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":379,"name":"Registeel","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":380,"name":"Latios","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":381,"name":"Latias","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":382,"name":"Kyogre","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":383,"name":"Groudon","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":384,"name":"Rayquaza","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":385,"name":"Jirachi","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":386,"name":"Deoxys","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":387,"name":"Turtwig","wildscape":"-","normal":"https://imgur.com/a/MqC3Zcx","hoenn":"-","tier":"T4","moveset":"Grass","maxBroke":"~600","tasks":[]},{"num":388,"name":"Grotle","wildscape":"-","normal":"https://imgur.com/a/FnOsG7p","hoenn":"-","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":389,"name":"Torterra","wildscape":"https://imgur.com/a/OSpmhX3","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Ground","maxBroke":"3.500","tasks":[]},{"num":390,"name":"Chimchar","wildscape":"-","normal":"https://imgur.com/a/FaS0Gng","hoenn":"-","tier":"T4","moveset":"Fire","maxBroke":"~600","tasks":[]},{"num":391,"name":"Monferno","wildscape":"-","normal":"https://imgur.com/a/trDdCP1","hoenn":"-","tier":"T3","moveset":"Fire","maxBroke":"~700","tasks":[]},{"num":392,"name":"Infernape","wildscape":"https://imgur.com/a/wmqPdfw","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Fire","maxBroke":"3.500","tasks":[]},{"num":393,"name":"Shinx","wildscape":"-","normal":"https://imgur.com/a/f1Qf5nZ","hoenn":"-","tier":null,"moveset":"Electric","maxBroke":null,"tasks":[]},{"num":394,"name":"Luxio","wildscape":"-","normal":"https://imgur.com/a/UahO6zW","hoenn":"-","tier":null,"moveset":"Electric","maxBroke":null,"tasks":[]},{"num":395,"name":"Luxray","wildscape":"https://imgur.com/a/L0bj8Vd","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Electric","maxBroke":"3.500","tasks":[]},{"num":396,"name":"Cranidos","wildscape":"-","normal":"-","hoenn":null,"tier":"T3","moveset":"Rock","maxBroke":"~700","tasks":[]},{"num":397,"name":"Rampardos","wildscape":"-","normal":"-","hoenn":null,"tier":"Ultra Rare","moveset":"Rock","maxBroke":"9.400","tasks":[]},{"num":398,"name":"Pachirisu","wildscape":"https://imgur.com/a/RzUEzwM","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Electric","maxBroke":"3.500","tasks":[{"npc":"Edmund","loc":"https://imgur.com/a/AHqoyTH"}]},{"num":399,"name":"Lopuny","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"Fighting","maxBroke":null,"tasks":[]},{"num":400,"name":"Riolu","wildscape":"-","normal":"https://imgur.com/a/m5Tr8hw","hoenn":"-","tier":"T3","moveset":"Fighting","maxBroke":"~700","tasks":[]},{"num":401,"name":"Lucario","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Fighting","maxBroke":"22.535","tasks":[]},{"num":402,"name":"Croagunk","wildscape":"-","normal":"-","hoenn":"-","tier":null,"moveset":"?","maxBroke":null,"tasks":[]},{"num":403,"name":"Toxicroak","wildscape":"https://imgur.com/a/voSoRee","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Poison","maxBroke":"3.500","tasks":[]},{"num":404,"name":"Abomasnow","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/3Axl08R","tier":null,"moveset":null,"maxBroke":null,"tasks":[]},{"num":405,"name":"Rhyperior","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Rock","maxBroke":"22.535","tasks":[]},{"num":406,"name":"Tangrowth","wildscape":"https://imgur.com/a/6PD5gEv","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Grass","maxBroke":"3.500","tasks":[]},{"num":407,"name":"Leafeon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Grass","maxBroke":"22.535","tasks":[]},{"num":408,"name":"Glaceon","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Ice","maxBroke":"22.535","tasks":[]},{"num":409,"name":"Gliscor","wildscape":"https://imgur.com/a/7Oi6jPs","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Flying","maxBroke":"3.500","tasks":[]},{"num":410,"name":"Dusknoir","wildscape":"https://imgur.com/a/DMCBxm0","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Ghost","maxBroke":"3.500","tasks":[]},{"num":411,"name":"Audino","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/3Axl08R","tier":null,"moveset":null,"maxBroke":null,"tasks":[]},{"num":412,"name":"Scolipede","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/3Axl08R","tier":null,"moveset":null,"maxBroke":null,"tasks":[]},{"num":413,"name":"Trubbish","wildscape":"-","normal":"https://imgur.com/a/TvxHyi5","hoenn":"-","tier":"T4","moveset":"Poison","maxBroke":"~600","tasks":[]},{"num":414,"name":"Garbodor","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Poison","maxBroke":"22.535","tasks":[]},{"num":415,"name":"Druddigon","wildscape":"-","normal":"-","hoenn":"-","tier":"T1","moveset":"Dragon","maxBroke":"1.280","tasks":[]},{"num":416,"name":"Deino","wildscape":"-","normal":"DG de Deino","hoenn":"-","tier":"T5","moveset":"Dark","maxBroke":"~400","tasks":[]},{"num":417,"name":"Zweilous","wildscape":"-","normal":"DG de Zweilous","hoenn":"-","tier":"T2","moveset":"Dark","maxBroke":"~900","tasks":[]},{"num":418,"name":"Hydreigon","wildscape":"https://imgur.com/a/tkRwGdL","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Dark","maxBroke":"3.500","tasks":[]},{"num":419,"name":"Flabébé","wildscape":"-","normal":"DG de Flabébé","hoenn":"-","tier":"T5","moveset":"Fairy","maxBroke":"~400","tasks":[]},{"num":420,"name":"Floette","wildscape":"-","normal":"DG de Folette","hoenn":"-","tier":"T4","moveset":"Fairy","maxBroke":"~600","tasks":[]},{"num":421,"name":"Florges","wildscape":"https://imgur.com/a/dHnsWqn","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Fairy","maxBroke":"3.500","tasks":[]},{"num":422,"name":"Skiddo","wildscape":"-","normal":"https://imgur.com/a/F5s8G9v","hoenn":"-","tier":"T3","moveset":"Grass","maxBroke":"~700","tasks":[]},{"num":423,"name":"Gogoat","wildscape":"https://imgur.com/a/yMA3Qn2","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Grass","maxBroke":"3.500","tasks":[]},{"num":424,"name":"Dragalge","wildscape":"-","normal":"-","hoenn":"https://imgur.com/a/3Axl08R","tier":null,"moveset":null,"maxBroke":null,"tasks":[]},{"num":425,"name":"Sylveon","wildscape":"https://imgur.com/a/LR5ibxC","normal":"-","hoenn":"https://imgur.com/a/wFcUcVR","tier":"Legendary","moveset":"Fairy","maxBroke":"22.535","tasks":[]},{"num":426,"name":"Mimikyu","wildscape":"https://imgur.com/a/tBNDQGq","normal":"-","hoenn":"-","tier":"Super Rare","moveset":"Fairy","maxBroke":"3.500","tasks":[{"npc":"Kyra","loc":"https://imgur.com/a/UvNX1DL"}]}]</script>
+<script id="hazard-tasks-data" type="application/json">[{"npc":"Nerida","loc":"https://imgur.com/a/xg5rMPJ","task":"6 Sh Wailord, 6 Sh Whiscash, 6 Sh Crawdaunt, 6 Sh Luvdisk, 6 Sh Clamperl"},{"npc":"Verdra","loc":"https://imgur.com/a/zvLFSgR","task":"15 Sh Roselia, 15 Sh Cradily"},{"npc":"Rohgar","loc":"https://imgur.com/a/SJ6dfJN","task":"6 Sh Mightyena, 6 Sh Zangooze, 6 Sh Seviper, 6 Sh Absol, 6 Sh Sharpedo"},{"npc":"Draven","loc":"https://imgur.com/a/UvZJqKw","task":"15 Sh Flygon, 15 Sh Salamalence"},{"npc":"Ferris","loc":"https://imgur.com/a/PKI4Fgs","task":"10 Sh Aggron, 10 Sh Mawile, 10 Sh Metagross"},{"npc":"Talia","loc":"https://imgur.com/a/G9d2mFX","task":"8 Sh Breloom, 8 Sh Shiftry, 7 Sh Cacturne, 7 Sh Tropius"},{"npc":"Nyxen","loc":"https://imgur.com/a/xSn4850","task":"10 Sh Sableye, 10 Sh Banette, 10 Sh Dusclops"},{"npc":"Voltrix","loc":"https://imgur.com/a/UanfcaO","task":"30 Sh Manectric"},{"npc":"Glacis","loc":"https://imgur.com/a/0e03YqH","task":"15 Sh Glalie, 15 Sh Walrein"},{"npc":"Hadriel","loc":"https://imgur.com/a/ocIvomr","task":"10 Sh Hariyama, 10 Sh Medicham, 10 Sh Slaking"},{"npc":"Lucine","loc":"https://imgur.com/a/aLVehVK","task":"8 Sh Linoone, 8 Sh Delcatty, 7 Sh Swellow, 7 Sh Kecleon"},{"npc":"Veska","loc":"https://imgur.com/a/IEHYSjh","task":"5 Sh Beautifly, 5 Sh Dustox, 4 Sh Masquerain, 4 Sh Ninjask, 4 Sh Volbeat, 4 Sh Ilumise, 4 Sh Shedinja"},{"npc":"Calder","loc":"https://imgur.com/a/vqSpNqd","task":"15 Sh Camerupt, 15 Sh Torkoal"},{"npc":"Kaela","loc":"https://imgur.com/a/tJym2M8","task":"10 Sh Sceptile, 10 Sh Blaziken, 10 Sh Swampert"},{"npc":"Orlan","loc":"https://imgur.com/a/Vb1w5mD","task":"15 Sh Pelipper, 15 Sh Altaria"},{"npc":"Selene","loc":"https://imgur.com/a/IWLKYmI","task":"5 Sh Gardevoir, 5 Sh Grumpig, 5 Sh Chimecho, 5 Sh Claydol, 5 Sh Lunatone, 5 Sh Solrock"},{"npc":"Maera","loc":"https://imgur.com/a/wVfbJ3e","task":"8 Sh Milotic, 8 Sh Huntail, 7 Sh Gorebyss, 7 Sh Relicanth"}]</script>
+<script id="rotations-data" type="application/json">{"rotations":[{"element":"Dark / Ghost","types":["Dark","Ghost"],"team":[{"name":"Mightyena","tier":"T2","stars":2,"offtank":true},{"name":"Gengar","tier":"T2"},{"name":"Shiny Hitmonchan","tier":"T1"},{"name":"Shiny Cacturne","tier":"T1"},{"name":"Shiny Persian","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Umbreon","tier":"T1"},{"name":"Dusknoir","tier":"T1"}],"improvements":["Shiny Houndoom - SR","Shiny Hydreigon - SR","Shiny Misdreavus - SR","Shiny Tauros - SR","Shiny Dusknoir - SR"],"pros":"Time forte com muitos SR.","cons":"Offtanks ruins, normalmente caro."},{"element":"Electric","types":["Electric"],"team":[{"name":"Luxray","tier":"T1","offtank":true},{"name":"Pachirisu","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Raichu","tier":"T1"},{"name":"Electabuzz","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Ampharos","tier":"T1"},{"name":"Shiny Jolteon","tier":"T1"}],"improvements":["Shiny Luxray (Offtank) - SR","Shiny Pachirisu (Offtank) - SR"],"pros":"Time forte, bem balanceado e barato.","cons":"Hunts underwater; thunder aparentemente não bate 2x em água, o que dificulta as hunts desse elemento."},{"element":"Fairy","types":["Fairy"],"team":[{"name":"Mega Clefable","tier":"T1","offtank":true},{"name":"Mimikyu","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Wigglytuff","tier":"T2","stars":2},{"name":"Shiny Togetic","tier":"T3"},{"name":"Togetic","tier":"T3"},{"name":"Shiny Delcatty","tier":"T1"},{"name":"Shiny Granbull","tier":"T2","stars":2,"offtank":true},{"name":"Sylveon","tier":"T2","stars":2,"offtank":true},{"name":"Florges","tier":"T2","stars":2,"offtank":true}],"improvements":["Shiny Mimikyu (Offtank) - SR","Shiny Florges (Offtank) - SR"],"pros":"Muitos pokémons T2, sendo bem acessível.","cons":"Nenhum muito relevante."},{"element":"Fighting","types":["Fighting"],"team":[{"name":"Shiny Hitmontop","tier":"T1","offtank":true},{"name":"Shiny Hitmonlee","tier":"T1"},{"name":"Shiny Hitmonchan","tier":"T1"},{"name":"Shiny Poliwrath","tier":"T1","offtank":true},{"name":"Shiny Heracross","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Ledian","tier":"T3","stars":3},{"name":"Machamp","tier":"T3","stars":3}],"improvements":["Shiny Machamp (Offtank) - SR","Shiny Kangaskhan - SR","Shiny Hariyama (Offtank) - T1"],"pros":"Time forte, bem balanceado e com muitas opções de hunt.","cons":"Stuns com área pequena e muitos ataques frontais; exige mais habilidade do jogador."},{"element":"Fire","types":["Fire"],"team":[{"name":"Arcanine","tier":"T2","stars":2,"offtank":true},{"name":"Infernape","tier":"T1"},{"name":"Shiny Ninetales","tier":"T1"},{"name":"Shiny Rapidash","tier":"T1","offtank":true},{"name":"Shiny Typhlosion","tier":"T1","offtank":true},{"name":"Shiny Charizard","tier":"T1"},{"name":"Shiny Flareon","tier":"T1"}],"improvements":["Shiny Infernape - SR","Shiny Arcanine (Offtank) - SR"],"pros":"Hunts boas e muitas opções de pokémons pra encaixar na rotação.","cons":"Tende a ser caro mesmo sem demanda muito maior do que o normal."},{"element":"Flying","types":["Flying"],"team":[{"name":"Shiny Pidgeot","tier":"T1","offtank":true},{"name":"Shiny Farfetch'd","tier":"T1"},{"name":"Shiny Beautifly","tier":"T1","offtank":true},{"name":"Shiny Mantine","tier":"T1","offtank":true},{"name":"Shiny Dodrio","tier":"T1"},{"name":"Gliscor","tier":"T1","offtank":true}],"improvements":["Shiny Swellow - SR","Shiny Gliscor (Offtank) - SR"],"pros":"Time forte, bem balanceado, combos rápidos e em grande área — exige pouca habilidade do jogador.","cons":"Caro e pouco acessível; muito provavelmente você terá que projetar seus próprios pokémons ou pagar caro por eles."},{"element":"Grass","types":["Grass"],"team":[{"name":"Tangrowth","tier":"T1","offtank":true},{"name":"Gogoat","tier":"T1","offtank":true},{"name":"Shiny Victreebel","tier":"T3","stars":3},{"name":"Shiny Tangela","tier":"T2","stars":2},{"name":"Tropius","tier":"T2","stars":2},{"name":"Shiny Venusaur","tier":"T1","offtank":true},{"name":"Shiny Meganium","tier":"T1","offtank":true},{"name":"Shiny Bellossom","tier":"T3","stars":3},{"name":"Shiny Exeggutor","tier":"T2","stars":2}],"improvements":["Shiny Tangrowth (Offtank) - SR","Shiny Gogoat (Offtank) - SR"],"pros":"Provavelmente o time mais forte e, ao mesmo tempo, o mais barato — o primeiro a fechar 2x2x2, com T2 e T3 absurdamente fortes.","cons":"Por ser tão acessível e forte, as melhores hunts ficam muito cheias; hunts underwater."},{"element":"Ground","types":["Ground"],"team":[{"name":"Shiny Steelix","tier":"T1","offtank":true},{"name":"Torterra","tier":"T1"},{"name":"Shiny Rhydon","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Nidoqueen","tier":"T1","offtank":true},{"name":"Shiny Marowak","tier":"T1"},{"name":"Shiny Ursaring","tier":"T1"},{"name":"Shiny Piloswine","tier":"T2","stars":2},{"name":"Shiny Camerupt","tier":"T1"},{"name":"Shiny Whiscash","tier":"T1"}],"improvements":["Shiny Torterra - SR","Shiny Pupitar - SR"],"pros":"Time forte, bem balanceado, com muitas opções de hunt e que exige pouca habilidade do jogador.","cons":"Por ter tantos pontos positivos, acaba sendo bem procurado — o que encarece os pokémons."},{"element":"Ice","types":["Ice"],"team":[{"name":"Shiny Lapras","tier":"T1","offtank":true},{"name":"Shiny Jynx","tier":"T1"},{"name":"Abomasnow","tier":"T2","stars":2},{"name":"Glaceon","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Hitmonchan","tier":"T1"},{"name":"Shiny Smeargle (Ice)","tier":"T1","note":"CD de SR"},{"name":"Castform Snow","tier":"T2","note":"Precisa testar"},{"name":"Shiny Castform Snow","tier":"T1","note":"Precisa testar"}],"improvements":["Shiny Walrein - SR"],"pros":"Muitas hunts exclusivas, incluindo 2 Ultra Rare.","cons":"Não tem defesa a nada, difícil de montar. Compensa ter offtanks de outros elementos e usar os Ice como burst damage."},{"element":"Poison","types":["Poison"],"team":[{"name":"Shiny Muk","tier":"T1","offtank":true},{"name":"Shiny Nidoking","tier":"T1"},{"name":"Shiny Qwilfish","tier":"T3","stars":3,"offtank":true},{"name":"Swalot","tier":"T2","stars":2},{"name":"Shiny Tentacruel","tier":"T1","offtank":true},{"name":"Shiny Arbok","tier":"T3","stars":3},{"name":"Toxicroak","tier":"T2","stars":2}],"improvements":["Shiny Toxicroak - SR","Shiny Seviper - SR"],"pros":"Time barato e razoavelmente fácil de conseguir.","cons":"Caça poucos elementos; melhor mesclar com outros elementos."},{"element":"Psychic","types":["Psychic"],"team":[{"name":"Shiny Espeon","tier":"T1","offtank":true},{"name":"Shiny Smeargle (Psy)","tier":"T1","note":"CD de SR"},{"name":"Shiny Wobbuffet","tier":"SR"},{"name":"Shiny Slowking","tier":"T1","offtank":true},{"name":"Alakazam","tier":"T2","stars":2,"offtank":true},{"name":"Shiny Mr. Mime","tier":"SR"},{"name":"Wobbuffet","tier":"T2","note":"Precisa testar"}],"improvements":[],"pros":"Francamente, nenhum por hora.","cons":"Tem poucas opções de pokémons e caça poucas hunts."},{"element":"Rock","types":["Rock"],"team":[{"name":"Rhyperior","tier":"T1","offtank":true},{"name":"Shiny Golem","tier":"T1"},{"name":"Rampardos","tier":"T1","offtank":true},{"name":"Shiny Lunatone","tier":"T1"},{"name":"Shiny Magcargo","tier":"T1","offtank":true},{"name":"Shiny Miltank","tier":"T1"},{"name":"Tyranitar","tier":"T2","stars":2},{"name":"Shiny Solrock","tier":"T1"},{"name":"Shiny Kabutops","tier":"T1","note":"Precisa testar"},{"name":"Shiny Omastar","tier":"T1","note":"Precisa testar"}],"improvements":["Shiny Armaldo - SR"],"pros":"Rotação forte de dano/defesa com excelentes offtanks, pokémons baratos pra estrelar, e caça o próprio SR de Hoenn.","cons":"Stuns demorados e com delay; sem muitas opções de variação de pokémons."},{"element":"Steel","types":["Steel"],"team":[{"name":"Shiny Forretress","tier":"T2","stars":2,"offtank":true},{"name":"Lucario","tier":"T2","stars":2,"offtank":true},{"name":"Magneton","tier":"T3","stars":3},{"name":"Shiny Metang","tier":"T1","offtank":true},{"name":"Shiny Magneton","tier":"T2","stars":2},{"name":"Shiny Mawile","tier":"T1"}],"improvements":["Shiny Skarmory - SR","Shiny Aggron - SR"],"pros":"Pokémons com CD baixo.","cons":"Melhor mesclar com outros elementos."},{"element":"Water","types":["Water"],"team":[{"name":"Shiny Blastoise","tier":"T1","offtank":true},{"name":"Shiny Vaporeon","tier":"T1","offtank":true},{"name":"Milotic","tier":"T2","stars":2},{"name":"Shiny Feraligatr","tier":"T1","offtank":true},{"name":"Shiny Politoed","tier":"T1"},{"name":"Shiny Starmie","tier":"T2","stars":2}],"improvements":["Shiny Sharpedo - SR","Shiny Kingdra - SR"],"pros":"Time forte, bem balanceado e barato.","cons":""}],"incomplete":[{"element":"Bug","types":["Bug"],"notes":["Shiny Pinsir - SR","Shiny Scyther - SR","Scolipede - T2"]},{"element":"Dragon","types":["Dragon"],"notes":["Loucura, nem inventa."]}],"tips":["Esse guia é pra iniciantes: são sugestões de times baratos pra começar em Hoenn, não são os times ideais nem os melhores possíveis — são os mais acessíveis.","São sugeridos times mono-elemento, pra aumentar as opções de hunt.","Os pokémons dessa lista foram testados; os poucos que não foram estão indicados. Se falta alguma opção, é por falta de teste.","Em todas as rotações dá pra encaixar Shiny Smeargle do elemento da rotação: é um T1 com bom dano e CDs de SR, mas morre fácil.","Shiny Hitmonchan é um coringa: com o Elemental Hands, ele entra em 5 rotações — Fighting, Fire, Electric, Ice e Ghost."]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('pokedex-data').textContent);
+const HAZARD_TASKS = JSON.parse(document.getElementById('hazard-tasks-data').textContent);
+const ROTATIONS_DATA = JSON.parse(document.getElementById('rotations-data').textContent);
+
+const ROTATION_TIER_ABBR = { 'SR':'Super Rare', 'UR':'Ultra Rare' };
+function normalizeRotationTier(t){ return ROTATION_TIER_ABBR[t] || t; }
+
+// Best-effort mapping from a rotation team member's display name to a
+// sprite-lookup slug: strips "Shiny"/"Mega" prefixes and parenthetical
+// or trailing form notes (e.g. "Smeargle (Ice)", "Castform Snow").
+function rotationSpriteSlug(rawName){
+  let n = rawName.replace(/^Shiny\s+/i,'').replace(/^Mega\s+/i,'');
+  n = n.replace(/\s*\([^)]*\)\s*$/,'');
+  n = n.replace(/\s+Snow$/i,'');
+  return slugify(n.trim());
+}
+
+function memberChipHTML(mem){
+  const tierKey = normalizeRotationTier(mem.tier);
+  const color = TIER_COLOR[tierKey] || 'var(--text-muted)';
+  const stars = mem.stars ? '★'.repeat(mem.stars) : '';
+  return `<div class="member-chip">
+    <div class="sprite-box member-sprite" data-slug="${rotationSpriteSlug(mem.name)}">${ICON_POKEBALL}</div>
+    <span class="member-name">${escapeHtml(mem.name)}</span>
+    <span class="member-meta">
+      ${stars ? `<span class="member-stars">${stars}</span>` : ''}
+      ${mem.offtank ? `<span class="member-offtank">Offtank</span>` : ''}
+      <span class="member-tier-badge" style="color:${color}">${escapeHtml(mem.tier)}</span>
+    </span>
+    ${mem.note ? `<span class="member-note">${escapeHtml(mem.note)}</span>` : ''}
+  </div>`;
+}
+
+function rotationTypeDot(types){
+  if (types.length === 1){
+    const c = TYPE_COLOR[types[0]] || '#868e96';
+    return `<span class="rotation-type-dot" style="background:${c}"></span>`;
+  }
+  const c1 = TYPE_COLOR[types[0]] || '#868e96';
+  const c2 = TYPE_COLOR[types[1]] || '#868e96';
+  return `<span class="rotation-type-dot dual" style="background:linear-gradient(135deg, ${c1} 50%, ${c2} 50%)"></span>`;
+}
+
+function rotationCardHTML(r){
+  return `
+    <details class="rotation-card">
+      <summary>
+        <div class="rotation-summary-left">
+          ${rotationTypeDot(r.types)}
+          <span class="rotation-name">${escapeHtml(r.element)}</span>
+          <span class="rotation-pros-preview">${escapeHtml(r.pros)}</span>
+        </div>
+        <svg class="rotation-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="rotation-body">
+        <div class="rotation-section-label">Time inicial</div>
+        <div class="member-grid">${r.team.map(memberChipHTML).join('')}</div>
+        ${r.improvements.length ? `
+          <div class="rotation-section-label">O que pode melhorar</div>
+          <ul class="rotation-improve-list">${r.improvements.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>
+        ` : ''}
+        <div class="pros-cons-grid">
+          <div class="pros-cons-box pros"><b>Prós</b>${escapeHtml(r.pros)}</div>
+          ${r.cons ? `<div class="pros-cons-box cons"><b>Contras</b>${escapeHtml(r.cons)}</div>` : ''}
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function incompleteItemHTML(r){
+  return `<div class="incomplete-item">
+    <span class="incomplete-name">${escapeHtml(r.element)}</span>
+    <span class="incomplete-notes">${r.notes.map(escapeHtml).join(' · ')}</span>
+  </div>`;
+}
+
+function renderRotations(){
+  document.getElementById('rotationsIntro').textContent = 'Sugestões de times baratos e acessíveis pra começar a jogar Hoenn — mono-elemento, pra abrir mais opções de hunt. Não são os times ideais, são os mais fáceis de montar no início.';
+  document.getElementById('rotationTips').innerHTML = ROTATIONS_DATA.tips.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  document.getElementById('rotationsList').innerHTML = ROTATIONS_DATA.rotations.map(rotationCardHTML).join('');
+  document.getElementById('rotationsIncomplete').innerHTML = ROTATIONS_DATA.incomplete.map(incompleteItemHTML).join('');
+
+  // Sprites live inside <details>; a closed details has no layout box, so
+  // the IntersectionObserver won't see them until the card is opened.
+  document.querySelectorAll('#rotationsList details.rotation-card').forEach(det => {
+    det.addEventListener('toggle', () => {
+      if (det.open){
+        det.querySelectorAll('.sprite-box[data-slug]').forEach(box => io.observe(box));
+      }
+    });
+  });
+}
+
+const BOOST_STEPS = [
+  'Consiga uma Boost Stone da faixa correta.',
+  'Confirme se o elemento da pedra corresponde a pelo menos um dos elementos do Pokémon.',
+  'Use a pedra na Poké Ball.',
+  'Em caso de sucesso, o Pokémon recebe +1 de Boost.'
+];
+
+const BOOST_STONE_DATA = [
+  { range:'+0 até +5',   name:'Novice',    chance:'50%', color:'#64748b' },
+  { range:'+5 até +10',  name:'Elemental', chance:'40%', color:'#0ea5e9' },
+  { range:'+10 até +15', name:'Common',    chance:'30%', color:'#22c55e' },
+  { range:'+15 até +20', name:'Enhanced',  chance:'20%', color:'#eab308' },
+  { range:'+20 até +25', name:'Potent',    chance:'18%', color:'#f97316' },
+  { range:'+25 até +30', name:'Advanced',  chance:'15%', color:'#ef4444' },
+  { range:'+30 até +35', name:'Fortified', chance:'12%', color:'#d946ef' },
+  { range:'+35 até +40', name:'Supreme',   chance:'10%', color:'#a855f7' },
+  { range:'+40 até +45', name:'Celestial', chance:'8%',  color:'#6366f1' },
+  { range:'+45 até +50', name:'Mystic',    chance:'5%',  color:'var(--gold)' },
+];
+
+const BOOST_CRAFT_ITEMS = [
+  'Itens de Pokémon relacionados ao elemento;',
+  'Fragmentos daquele elemento;',
+  'A pedra elemental correspondente;',
+  'Os demais materiais mostrados na receita.'
+];
+
+const BOOST_CHECKLIST = [
+  'Se é a Poké Ball correta;',
+  'Se a faixa da pedra corresponde ao Boost atual;',
+  'Se o elemento é compatível;',
+  'Se esse Pokémon continuará no time principal.'
+];
+
+function renderBoost(){
+  document.getElementById('boostIntro').innerHTML = 'O Boost aumenta o poder do Pokémon de forma <b>permanente</b>. O limite atual é <b>+50</b> e cada ponto de Boost é tratado como <b>3 níveis adicionais</b> no cálculo de dano das magias. Assim, um Pokémon +50 recebe o equivalente a 150 níveis extras nesse cálculo.';
+
+  document.getElementById('boostSteps').innerHTML = BOOST_STEPS.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  document.getElementById('boostApplyNote').textContent = 'O Boost, os Helds e demais propriedades ficam registrados na Poké Ball.';
+
+  const table = document.getElementById('boostTable');
+  table.innerHTML = BOOST_STONE_DATA.map(b => `
+    <tr>
+      <td>${b.range}</td>
+      <td><span class="rarity-badge">${gemSVG(b.color,13)}${b.name}</span></td>
+      <td>${b.chance}</td>
+    </tr>
+  `).join('');
+  document.getElementById('boostTableNote').innerHTML = 'O painel e a descrição da pedra mostram a faixa aceita. O sistema antigo acima de +50, com regressão e limite +70, <b>não faz parte da configuração atual</b>.';
+
+  document.getElementById('boostFailText').innerHTML = 'A pedra é consumida, mas o Pokémon <b>não perde Boost</b>. Cada falha acrescenta <b>10 pontos percentuais</b> à próxima tentativa daquela faixa. Quando uma tentativa tem sucesso, esse bônus acumulado volta a zero.';
+  document.getElementById('boostFailExample').textContent = 'Exemplo: uma pedra com 20% começa em 20%. Se falhar, a tentativa seguinte passa a 30%; depois 40%, e assim por diante até o sucesso.';
+
+  document.getElementById('boostCraftIntro').textContent = 'A máquina de craft usa:';
+  document.getElementById('boostCraftList').innerHTML = BOOST_CRAFT_ITEMS.map(i => `<li>${escapeHtml(i)}</li>`).join('');
+  document.getElementById('boostCraftNote').textContent = 'As receitas são atualizadas pelo servidor e podem mudar. Consulte a máquina antes de separar os materiais.';
+
+  document.getElementById('boostFragmentsText').innerHTML = 'Os fragmentos são obtidos principalmente em Dungeons ligadas ao mesmo elemento. Uma Dungeon da família Machop, por exemplo, ajuda a obter materiais de Fighting.';
+
+  document.getElementById('boostInvestIntro').textContent = 'Para um time novo, é melhor distribuir os primeiros Boosts entre os Pokémon realmente usados na rotação. Depois que o grupo estiver estável, concentre as pedras mais raras nos principais causadores de dano.';
+  document.getElementById('boostChecklist').innerHTML = BOOST_CHECKLIST.map(i => `<li>${escapeHtml(i)}</li>`).join('');
+}
+
+function hazardTaskCardHTML(t){
+  let locHtml;
+  const loc = t.loc;
+  if (!loc || loc === '-' || loc === '?'){
+    locHtml = `<div class="loc-text empty">Localização não registrada</div>`;
+  } else if (loc.startsWith('http')){
+    locHtml = `<div class="media-slot" data-src="${escapeHtml(loc)}"><div class="media-placeholder">Carregando imagem...</div></div>`;
+  } else {
+    locHtml = `<div class="loc-text">${escapeHtml(loc)}</div>`;
+  }
+  return `
+    <div class="card">
+      <div class="card-top">
+        <div class="sprite-box">${ICON_NPC}</div>
+        <div class="card-name-wrap">
+          <div class="card-num">NPC de Hazard</div>
+          <div class="card-name">${escapeHtml(t.npc)}</div>
+        </div>
+      </div>
+      <div class="loc-block" style="border-top:none; padding-top:0;">
+        <div class="loc-tag" style="color:var(--accent);">${starSVG('var(--accent)',11)}Pede pra liberar</div>
+        <div class="loc-text">${escapeHtml(t.task)}</div>
+      </div>
+      <div class="loc-block">
+        <div class="loc-tag wild">${pokeballSVG(CAT_COLOR.wild,13)}Onde encontrar</div>
+        ${locHtml}
+      </div>
+    </div>
+  `;
+}
+
+function renderHazard(){
+  document.getElementById('hazardIntro').textContent = 'Hazard aumenta a recompensa da hunt, mas torna as hunts mais perigosas conforme o nível sobe. É recomendado ativar apenas depois que o time já vence as rotinas normais com folga.';
+  const grid = document.getElementById('hazardTasksGrid');
+  grid.innerHTML = HAZARD_TASKS.map(hazardTaskCardHTML).join('');
+  grid.querySelectorAll('.media-slot[data-src]').forEach(slot => io.observe(slot));
+}
+
+
+const RARITY_DATA = [
+  { name:'Mythic',      max:'?',      color:'var(--gold)' },
+  { name:'Legendary',   max:'22.535', color:'#7c3aed' },
+  { name:'Ultra Rare',  max:'9.400',  color:'#dc2626' },
+  { name:'Super Rare',  max:'3.500',  color:'#2563eb' },
+  { name:'T1',          max:'1.280',  color:'#334155' },
+  { name:'T2',          max:'~900',   color:'#475569' },
+  { name:'T3',          max:'~700',   color:'#5b6474' },
+  { name:'T4',          max:'~600',   color:'#6b7484' },
+  { name:'T5',          max:'~400',   color:'#7c8494' },
+  { name:'T6',          max:'~200',   color:'#8d94a3' },
+  { name:'T7',          max:'Não documentado', color:'#a3aab7' },
+];
+
+const TIER_COLOR = {
+  'Mythic':'var(--gold)', 'Legendary':'#7c3aed', 'Ultra Rare':'#dc2626', 'Super Rare':'#2563eb',
+  'T1':'#334155', 'T2':'#475569', 'T3':'#5b6474', 'T4':'#6b7484', 'T5':'#7c8494', 'T6':'#8d94a3', 'T7':'#a3aab7'
+};
+const TIER_ORDER = ['Mythic','Legendary','Ultra Rare','Super Rare','T1','T2','T3','T4','T5','T6','T7'];
+const TIER_RANK = Object.fromEntries(TIER_ORDER.map((t,i)=>[t,i]));
+
+const TYPE_COLOR = {
+  Grass:'#3fa34d', Fire:'#e8590c', Water:'#1c7ed6', Bug:'#74a30a', Flying:'#748ffc',
+  Normal:'#868e96', Poison:'#9c36b5', Electric:'#e8a300', Ground:'#a9762b', Fairy:'#e64980',
+  Fighting:'#c92a2a', Psychic:'#e64980', Rock:'#8d6e4b', Ghost:'#5f3dc4', Ice:'#15aabf',
+  Dragon:'#5c5cff', Dark:'#343a40', Steel:'#5c6470'
+};
+
+const OBS_DATA = [
+  'Premier/Alliance balls contam sempre como a primeira bola jogada.',
+  'Premier/Alliance balls contam para a contagem de brokes totais.',
+  'O max é um valor não oficial descoberto pela comunidade, e pode mudar a qualquer momento.',
+  'As brokes são pra shinys. Pokémon normal não tem max.',
+  'Chegar na máxima não garante o catch. A chance só fica muito mais alta.',
+  'O sistema de mérito considera o total de brokes. Os rates não têm nada a ver com ele.'
+];
+
+const RATES_DATA = [
+  { label:'Premier Ball', value:'4x', color:'#e63946' },
+  { label:'Ultra Ball', value:'4x', color:'#2b2d42' },
+  { label:'Alliance Ball', value:'5x', color:'#7c3aed' },
+  { label:'Elemental Ball', value:'5x', color:'#f77f00' },
+];
+
+const SLUG_OVERRIDES = {
+  'Nidoran female': 'nidoran-f',
+  'Nidoran Male': 'nidoran-m',
+  "Farfetch'd": 'farfetchd',
+  'Mr. Mime': 'mr-mime',
+  'Porygon2': 'porygon2'
+};
+
+function slugify(name){
+  if (SLUG_OVERRIDES[name]) return SLUG_OVERRIDES[name];
+  return name.toLowerCase().replace(/'/g,'').replace(/\./g,'').replace(/\s+/g,'-');
+}
+
+const ICON_POKEBALL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2.6"/></svg>';
+const ICON_EMPTY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+const ICON_BROKE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 12l1.8 1.8L15 10"/></svg>';
+const ICON_CAMERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="6.5" width="19" height="13" rx="2.5"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6.5l1.4-2h4.2l1.4 2"/></svg>';
+
+// Mini pokéball icon — a tiny, cute pokeball badge used all over the wiki
+// to color-code categories (Wildscape/Normal/Hoenn/Ball rates) at a glance.
+function pokeballSVG(topColor, size){
+  size = size || 14;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pb-icon">
+    <circle cx="12" cy="12" r="9.6" fill="#fff" stroke="#20242d" stroke-width="1.4"/>
+    <path d="M2.4 12a9.6 9.6 0 0 1 19.2 0z" fill="${topColor}" stroke="#20242d" stroke-width="1.4"/>
+    <rect x="2.4" y="11.15" width="19.2" height="1.7" fill="#20242d"/>
+    <circle cx="12" cy="12" r="3.3" fill="#fff" stroke="#20242d" stroke-width="1.4"/>
+    <circle cx="12" cy="12" r="1.3" fill="#20242d"/>
+  </svg>`;
+}
+
+// Small star used to flag a Pokémon's shiny catch-difficulty tier.
+function starSVG(color, size){
+  size = size || 12;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}" class="pb-icon"><path d="M12 2.5l2.95 6.53 7.05.78-5.3 4.9 1.5 7.04L12 18.1l-6.2 3.65 1.5-7.04-5.3-4.9 7.05-.78z"/></svg>`;
+}
+
+// Small gem used to flag a Boost Stone's tier (distinct from shiny-tier stars).
+function gemSVG(color, size){
+  size = size || 13;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}" class="pb-icon"><path d="M6 3h12l4 6-10 12L2 9z"/></svg>`;
+}
+
+const CAT_COLOR = { wild:'var(--wild)', normal:'var(--normal)', hoenn:'var(--hoenn)' };
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function hasLoc(v){ return v && v !== '-'; }
+
+function getYoutubeId(url){
+  let m = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  m = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  return null;
+}
+
+function renderLocBlock(tagClass, tagLabel, value){
+  const icon = pokeballSVG(CAT_COLOR[tagClass], 13);
+  if (!hasLoc(value)){
+    return `<div class="loc-block"><div class="loc-tag ${tagClass}">${icon}${tagLabel}</div><div class="loc-text empty">Indisponível</div></div>`;
+  }
+  if (value.startsWith('http')){
+    return `<div class="loc-block">
+      <div class="loc-tag ${tagClass}">${icon}${tagLabel} <span class="loc-media-hint">${ICON_CAMERA}print/vídeo</span></div>
+      <div class="media-slot" data-src="${escapeHtml(value)}">
+        <div class="media-placeholder">Carregando imagem...</div>
+      </div>
+    </div>`;
+  }
+  return `<div class="loc-block"><div class="loc-tag ${tagClass}">${icon}${tagLabel}</div><div class="loc-text">${escapeHtml(value)}</div></div>`;
+}
+
+function shinyRow(p){
+  if (!p.tier){
+    return `<div class="shiny-row"><span class="no-tier">Tier do shiny ainda não catalogado</span></div>`;
+  }
+  const color = TIER_COLOR[p.tier] || 'var(--text-muted)';
+  const typeColor = TYPE_COLOR[p.moveset] || '#868e96';
+  const brokeText = p.maxBroke ? `Máx: <b style="color:var(--text)">${p.maxBroke}</b> brokes` : 'Máx: não documentado';
+  return `<div class="shiny-row">
+    <span class="tier-badge" style="color:${color}">${starSVG(color,11)}${escapeHtml(p.tier)}</span>
+    ${p.moveset ? `<span class="type-badge" style="background:${typeColor}">${escapeHtml(p.moveset)}</span>` : ''}
+    <span class="broke-badge">${ICON_BROKE}${brokeText}</span>
+  </div>`;
+}
+
+function cardHTML(p){
+  return `
+    <div class="card" data-name="${escapeHtml(p.name.toLowerCase())}">
+      <div class="card-top">
+        <div class="sprite-box" data-slug="${slugify(p.name)}">${ICON_POKEBALL}</div>
+        <div class="card-name-wrap">
+          <div class="card-num">#${String(p.num).padStart(3,'0')}</div>
+          <div class="card-name">${escapeHtml(p.name)}</div>
+        </div>
+      </div>
+      ${shinyRow(p)}
+      ${renderLocBlock('wild','Wildscape', p.wildscape)}
+      ${renderLocBlock('normal','Normal', p.normal)}
+      ${renderLocBlock('hoenn','Hoenn', p.hoenn)}
+    </div>
+  `;
+}
+
+const ICON_NPC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>';
+
+function npcRow(t){
+  const loc = t.loc;
+  let locHtml;
+  if (!loc || loc === '-' || loc === '?'){
+    locHtml = `<div class="loc-text empty">Localização não registrada</div>`;
+  } else if (loc.startsWith('http')){
+    locHtml = `<div class="media-slot" data-src="${escapeHtml(loc)}"><div class="media-placeholder">Carregando imagem...</div></div>`;
+  } else {
+    locHtml = `<div class="loc-text">${escapeHtml(loc)}</div>`;
+  }
+  return `<div class="npc-row">
+    <div class="npc-tag">${ICON_NPC}${escapeHtml(t.npc)}</div>
+    ${locHtml}
+  </div>`;
+}
+
+function taskCardHTML(p){
+  const tasks = p.tasks || [];
+  return `
+    <div class="card" data-name="${escapeHtml(p.name.toLowerCase())}">
+      <div class="card-top">
+        <div class="sprite-box" data-slug="${slugify(p.name)}">${ICON_POKEBALL}</div>
+        <div class="card-name-wrap">
+          <div class="card-num">#${String(p.num).padStart(3,'0')}</div>
+          <div class="card-name">${escapeHtml(p.name)}</div>
+        </div>
+      </div>
+      ${tasks.length ? tasks.map(npcRow).join('') : '<div class="npc-row"><span class="no-tasks">Nenhuma tarefa de NPC registrada</span></div>'}
+    </div>
+  `;
+}
+
+const tasksGrid = document.getElementById('view-tasks-grid');
+const taskSearchInput = document.getElementById('taskSearch');
+const taskResultCount = document.getElementById('taskResultCount');
+
+function renderTasks(){
+  const q = normalize(taskSearchInput.value.trim());
+  const withTasks = DATA.filter(p => p.tasks && p.tasks.length);
+  const filtered = q === '' ? withTasks : DATA.filter(p => normalize(p.name).includes(q));
+
+  taskResultCount.textContent = q ? `${filtered.length} / ${DATA.length}` : `${withTasks.length} com tarefa registrada`;
+
+  if (filtered.length === 0){
+    tasksGrid.innerHTML = `<div class="empty-state">${ICON_EMPTY}<p>Nenhum Pokémon encontrado pra <b>"${escapeHtml(taskSearchInput.value)}"</b></p></div>`;
+    return;
+  }
+
+  tasksGrid.innerHTML = filtered.map(taskCardHTML).join('');
+  document.querySelectorAll('#view-tasks-grid .sprite-box[data-slug]').forEach(box=> io.observe(box));
+  document.querySelectorAll('#view-tasks-grid .media-slot[data-src]').forEach(slot=> io.observe(slot));
+}
+
+const grid = document.getElementById('view-hunts');
+const searchInput = document.getElementById('search');
+const resultCount = document.getElementById('resultCount');
+const statsEl = document.getElementById('stats');
+const tierSelect = document.getElementById('tierSelect');
+const sortSelect = document.getElementById('sortSelect');
+let activeFilter = 'all';
+let activeTier = 'all';
+let activeSort = 'dex';
+
+function populateTierSelect(){
+  const present = TIER_ORDER.filter(t => DATA.some(p => p.tier === t));
+  tierSelect.innerHTML = '<option value="all">Todos os tiers</option>' +
+    present.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+function computeStats(){
+  const total = DATA.length;
+  const wild = DATA.filter(p=>hasLoc(p.wildscape)).length;
+  const normal = DATA.filter(p=>hasLoc(p.normal)).length;
+  const hoenn = DATA.filter(p=>hasLoc(p.hoenn)).length;
+  statsEl.innerHTML = `
+    <div class="stat-pill">${pokeballSVG('#2f5fdb',13)}<b>${total}</b>&nbsp;Pokémon na dex</div>
+    <div class="stat-pill">${pokeballSVG(CAT_COLOR.wild,13)}<b>${wild}</b>&nbsp;com hunt Wildscape</div>
+    <div class="stat-pill">${pokeballSVG(CAT_COLOR.normal,13)}<b>${normal}</b>&nbsp;com hunt Normal</div>
+    <div class="stat-pill">${pokeballSVG(CAT_COLOR.hoenn,13)}<b>${hoenn}</b>&nbsp;com hunt Hoenn</div>
+  `;
+}
+
+function renderLegend(){
+  const el = document.getElementById('legendBar');
+  el.innerHTML = `
+    <span class="legend-item">${pokeballSVG(CAT_COLOR.wild,13)}<b>Roxo</b> = Wildscape (Lvl 150+)</span>
+    <span class="legend-item">${pokeballSVG(CAT_COLOR.normal,13)}<b>Verde</b> = Normal</span>
+    <span class="legend-item">${pokeballSVG(CAT_COLOR.hoenn,13)}<b>Laranja</b> = Hoenn (Lvl 250+)</span>
+    <span class="legend-item">${starSVG('var(--gold)',12)}<b>Estrela</b> = tier de dificuldade do shiny</span>
+    <span class="legend-item">${ICON_CAMERA}<b>Câmera</b> = tem print ou vídeo da hunt</span>
+  `;
+}
+
+function matchesFilter(p){
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'missing') return !hasLoc(p.wildscape) && !hasLoc(p.normal) && !hasLoc(p.hoenn);
+  return hasLoc(p[activeFilter]);
+}
+
+function matchesTier(p){
+  if (activeTier === 'all') return true;
+  return p.tier === activeTier;
+}
+
+function normalize(str){
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+function sortData(list){
+  const arr = [...list];
+  if (activeSort === 'name'){
+    arr.sort((a,b)=> a.name.localeCompare(b.name));
+  } else if (activeSort === 'tier'){
+    arr.sort((a,b)=>{
+      const ra = a.tier ? TIER_RANK[a.tier] : 999;
+      const rb = b.tier ? TIER_RANK[b.tier] : 999;
+      if (ra !== rb) return ra - rb;
+      return a.num - b.num;
+    });
+  } else {
+    arr.sort((a,b)=> a.num - b.num);
+  }
+  return arr;
+}
+
+function render(){
+  const q = normalize(searchInput.value.trim());
+  let filtered = DATA.filter(p => matchesFilter(p) && matchesTier(p) && (q === '' || normalize(p.name).includes(q)));
+  filtered = sortData(filtered);
+
+  resultCount.textContent = q || activeFilter !== 'all' || activeTier !== 'all' ? `${filtered.length} / ${DATA.length}` : '';
+
+  if (filtered.length === 0){
+    grid.innerHTML = `<div class="empty-state">${ICON_EMPTY}<p>Nenhum Pokémon encontrado pra <b>"${escapeHtml(searchInput.value)}"</b></p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(cardHTML).join('');
+  observeLazy();
+}
+
+// ---------- Médias view ----------
+function renderMedias(){
+  const table = document.getElementById('rarityTable');
+  table.innerHTML = RARITY_DATA.map(r => `
+    <tr>
+      <td><span class="rarity-badge">${starSVG(r.color,13)}${r.name}</span></td>
+      <td>${r.max}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('obsList').innerHTML = OBS_DATA.map(o => `<li>${escapeHtml(o)}</li>`).join('');
+
+  document.getElementById('ratesGrid').innerHTML = RATES_DATA.map(r => `
+    <div class="rate-item">
+      <div class="rate-label">${pokeballSVG(r.color,15)}${r.label}</div>
+      <div class="rate-value">${r.value}</div>
+    </div>
+  `).join('');
+}
+
+// ---------- Lazy loading (sprites + embedded media) ----------
+const spriteCache = new Map();
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if (entry.isIntersecting){
+      const el = entry.target;
+      if (el.classList.contains('sprite-box')) loadSprite(el);
+      if (el.classList.contains('media-slot')) loadMedia(el);
+      io.unobserve(el);
+    }
+  });
+}, { rootMargin: '200px' });
+
+function observeLazy(){
+  document.querySelectorAll('.sprite-box[data-slug]').forEach(box=> io.observe(box));
+  document.querySelectorAll('.media-slot[data-src]').forEach(slot=> io.observe(slot));
+}
+
+async function loadSprite(box){
+  const slug = box.getAttribute('data-slug');
+  if (!slug) return;
+  if (spriteCache.has(slug)){
+    applySprite(box, spriteCache.get(slug));
+    return;
+  }
+  try{
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${slug}`);
+    if (!res.ok) throw new Error('not found');
+    const json = await res.json();
+    const url = json.sprites?.front_default || json.sprites?.other?.['official-artwork']?.front_default;
+    spriteCache.set(slug, url);
+    if (url) applySprite(box, url);
+  }catch(e){}
+}
+
+function applySprite(box, url){
+  if (!url) return;
+  const img = document.createElement('img');
+  img.src = url;
+  img.alt = '';
+  img.loading = 'lazy';
+  box.innerHTML = '';
+  box.appendChild(img);
+}
+
+function loadMedia(slot){
+  const src = slot.getAttribute('data-src');
+  if (!src) return;
+
+  if (src.includes('imgur.com')){
+    const clean = src.split('?')[0].replace(/\/$/, '');
+    const embedSrc = clean + '/embed?pub=true';
+    slot.classList.add('imgur');
+    slot.innerHTML = `<iframe src="${embedSrc}" allowfullscreen loading="lazy"></iframe>`;
+    return;
+  }
+
+  const ytId = getYoutubeId(src);
+  if (ytId){
+    slot.classList.add('video');
+    slot.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}" allowfullscreen loading="lazy"></iframe>`;
+    return;
+  }
+
+  slot.innerHTML = `<a href="${src}" target="_blank" rel="noopener" style="padding:16px;font-size:12px;color:var(--accent);">Abrir imagem</a>`;
+}
+
+document.getElementById('filters').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  render();
+});
+
+tierSelect.addEventListener('change', ()=>{ activeTier = tierSelect.value; render(); });
+sortSelect.addEventListener('change', ()=>{ activeSort = sortSelect.value; render(); });
+searchInput.addEventListener('input', render);
+taskSearchInput.addEventListener('input', renderTasks);
+
+// ---------- Tabs ----------
+const controlsBar = document.getElementById('controls');
+const viewHunts = document.getElementById('view-hunts');
+const viewTasks = document.getElementById('view-tasks');
+const viewMedias = document.getElementById('view-medias');
+const viewBoost = document.getElementById('view-boost');
+const viewHazard = document.getElementById('view-hazard');
+const viewRotations = document.getElementById('view-rotations');
+const viewDonate = document.getElementById('view-donate');
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const view = btn.dataset.view;
+    viewHunts.hidden = view !== 'hunts';
+    viewTasks.hidden = view !== 'tasks';
+    viewMedias.hidden = view !== 'medias';
+    viewBoost.hidden = view !== 'boost';
+    viewHazard.hidden = view !== 'hazard';
+    viewRotations.hidden = view !== 'rotations';
+    viewDonate.hidden = view !== 'donate';
+    controlsBar.hidden = view !== 'hunts';
+  });
+});
+
+// ---------- Theme toggle ----------
+const THEME_KEY = 'pokedex-pka-theme';
+const root = document.documentElement;
+
+function applyTheme(theme){
+  root.setAttribute('data-theme', theme);
+  try{ localStorage.setItem(THEME_KEY, theme); }catch(e){}
+}
+
+function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+  if (saved === 'light' || saved === 'dark'){
+    applyTheme(saved);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+}
+
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const current = root.getAttribute('data-theme') || 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+initTheme();
+populateTierSelect();
+computeStats();
+renderLegend();
+render();
+renderTasks();
+renderMedias();
+renderBoost();
+renderHazard();
+renderRotations();
+</script>
+</body>
+</html>
